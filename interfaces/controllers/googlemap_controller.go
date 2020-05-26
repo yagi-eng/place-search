@@ -15,7 +15,8 @@ func SearchResult() echo.HandlerFunc {
 		q := c.QueryParam("q")
 		gmc := c.Get("gmc").(*maps.Client)
 		r := &maps.TextSearchRequest{
-			Query: q,
+			Query:    q,
+			Language: "ja",
 		}
 
 		res, err := gmc.TextSearch(context.Background(), r)
