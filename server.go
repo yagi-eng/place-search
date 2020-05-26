@@ -1,36 +1,35 @@
 package main
 
 import (
-	"context"
-	"log"
-	"os"
+	"virtual-travel/infrastructure"
+	"virtual-travel/infrastructure/middlewares"
+	"virtual-travel/util/errmsg"
 
 	"github.com/joho/godotenv"
-	"github.com/kr/pretty"
-	"googlemaps.github.io/maps"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
+	"github.com/sirupsen/logrus"
 )
 
 func init() {
 	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env: %s", err)
-	}
+	errmsg.LogFatal(err)
+
+	logrus.SetLevel(logrus.DebugLevel)
+	logrus.SetFormatter(&logrus.JSONFormatter{})
 }
 
 func main() {
-	apiKey := os.Getenv("GMAP_API_KEY")
-	c, err := maps.NewClient(maps.WithAPIKey(apiKey))
-	if err != nil {
-		log.Fatalf("fatal error: %s", err)
-	}
-	r := &maps.TextSearchRequest{
-		Query: "東京タワー",
-	}
+	e := echo.New()
 
-	res, err := c.TextSearch(context.Background(), r)
-	if err != nil {
-		log.Fatalf("fatal error: %s", err)
-	}
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.CORS())
+	e.Use(middlewares.GoogleMapClient())
 
-	pretty.Println(res)
+	// Routes
+	infrastructure.Init(e)
+
+	// Start server
+	e.Logger.Fatal(e.Start(":8080"))
 }
