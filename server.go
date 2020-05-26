@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"virtual-travel/infrastructure"
 	"virtual-travel/infrastructure/middlewares"
 
@@ -33,5 +34,9 @@ func main() {
 	infrastructure.Init(e)
 
 	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	e.Logger.Fatal(e.Start(":" + port))
 }
