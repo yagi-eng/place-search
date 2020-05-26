@@ -16,14 +16,7 @@ func ReplyByBot() echo.HandlerFunc {
 
 		events, err := bot.ParseRequest(c.Request())
 		if err != nil {
-			w := c.Response().Writer
-			if err == linebot.ErrInvalidSignature {
-				w.WriteHeader(400)
-			} else {
-				w.WriteHeader(500)
-			}
 			logrus.Fatalf("Error LINEBOT parsing request: %v", err)
-			return nil
 		}
 
 		for _, event := range events {
