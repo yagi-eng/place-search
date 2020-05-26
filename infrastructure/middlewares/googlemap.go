@@ -24,7 +24,6 @@ func GoogleMapClient() echo.MiddlewareFunc {
 			if err := next(c); err != nil {
 				return err
 			}
-
 			return nil
 		}
 
