@@ -12,9 +12,10 @@ import (
 // SearchResult GoogleMapでの検索結果を取得する
 func SearchResult() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		q := c.QueryParam("q")
 		gmc := c.Get("gmc").(*maps.Client)
 		r := &maps.TextSearchRequest{
-			Query: "東京タワー",
+			Query: q,
 		}
 
 		res, err := gmc.TextSearch(context.Background(), r)
