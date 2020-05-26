@@ -16,7 +16,7 @@ func GetLocationURL(c echo.Context, q string) string {
 	return locationDetail.URL
 }
 
-// SearchLocations GoogleMapの検索結果を取得する
+// SearchLocations キーワードに基づきロケーションを検索する
 func SearchLocations(c echo.Context, q string) maps.PlacesSearchResponse {
 	gmc := c.Get("gmc").(*maps.Client)
 	r := &maps.TextSearchRequest{
@@ -41,7 +41,7 @@ func GetLocationDetail(c echo.Context, placeID string) maps.PlaceDetailsResult {
 
 	res, err := gmc.PlaceDetails(context.Background(), r)
 	if err != nil {
-		logrus.Fatal("Error GoogleMap TextSearch: %v", err)
+		logrus.Fatal("Error GoogleMap PlaceDetails: %v", err)
 	}
 	return res
 }
