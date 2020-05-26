@@ -23,7 +23,7 @@ func ReplyByBot() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					replyMessage := googlemap.SearchLocations(c, message.Text).Results[0].PlaceID
+					replyMessage := googlemap.GetLocationURL(c, message.Text)
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMessage)).Do(); err != nil {
 						logrus.Fatalf("Error LINEBOT replying message: %v", err)
 					}
