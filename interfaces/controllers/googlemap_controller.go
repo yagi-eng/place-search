@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"context"
-	"virtual-travel/util/errmsg"
 
 	"github.com/labstack/echo"
+	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 	"googlemaps.github.io/maps"
 )
@@ -18,7 +18,9 @@ func SearchResult() echo.HandlerFunc {
 		}
 
 		res, err := gmc.TextSearch(context.Background(), r)
-		errmsg.LogFatal(err)
+		if err != nil {
+			logrus.Fatal("Error GoogleMap TextSearch: %v", err)
+		}
 
 		return c.JSON(fasthttp.StatusOK, res)
 	}

@@ -3,7 +3,6 @@ package main
 import (
 	"virtual-travel/infrastructure"
 	"virtual-travel/infrastructure/middlewares"
-	"virtual-travel/util/errmsg"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
@@ -13,7 +12,9 @@ import (
 
 func init() {
 	err := godotenv.Load()
-	errmsg.LogFatal(err)
+	if err != nil {
+		logrus.Fatal("Error loading .env: %v", err)
+	}
 
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.SetFormatter(&logrus.JSONFormatter{})
