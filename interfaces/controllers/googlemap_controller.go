@@ -9,8 +9,8 @@ import (
 	"googlemaps.github.io/maps"
 )
 
-// SearchResult GoogleMapでの検索結果を取得する
-func SearchResult() echo.HandlerFunc {
+// SearchLocations GoogleMapでの検索結果を取得する
+func SearchLocations() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		q := c.QueryParam("q")
 		gmc := c.Get("gmc").(*maps.Client)

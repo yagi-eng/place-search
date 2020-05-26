@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	controller "virtual-travel/interfaces/controllers"
+	"virtual-travel/interfaces/controllers"
 
 	"github.com/labstack/echo"
 )
@@ -11,7 +11,7 @@ func Init(e *echo.Echo) {
 
 	g := e.Group("/api")
 	{
-		g.GET("/search", controller.SearchResult())
+		g.GET("/search", controllers.SearchLocations())
 	}
 
 }
