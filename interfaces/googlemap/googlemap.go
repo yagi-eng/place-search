@@ -8,17 +8,29 @@ import (
 	"googlemaps.github.io/maps"
 )
 
-// GetLocationURL 検索結果のロケーションのURLを取得する
-func GetLocationURL(c echo.Context, q string) string {
-	searchResult := SearchLocations(c, q)
-	placeID := searchResult.Results[0].PlaceID
-	locationDetail := GetLocationDetail(c, placeID)
-	return locationDetail.URL
+// GetLocationURLs 検索結果のロケーションのURLを取得する
+func GetLocationURLs(c echo.Context, q string) []string {
+	locations := searchLocations(c, q)
+	placeID := ""
+	locationURLs := []string{}
+
+	for i, location := range locations.Results {
+		placeID = location.PlaceID
+		locationDetail := getLocationDetail(c, placeID)
+		locationURLs = append(locationURLs, locationDetail.URL)
+
+		if i+1 == 3 {
+			break
+		}
+	}
+
+	return locationURLs
 }
 
-// SearchLocations キーワードに基づきロケーションを検索する
-func SearchLocations(c echo.Context, q string) maps.PlacesSearchResponse {
+// searchLocations キーワードに基づきロケーションを検索する
+func searchLocations(c echo.Context, q string) maps.PlacesSearchResponse {
 	gmc := c.Get("gmc").(*maps.Client)
+
 	r := &maps.TextSearchRequest{
 		Query:    q,
 		Language: "ja",
@@ -31,9 +43,10 @@ func SearchLocations(c echo.Context, q string) maps.PlacesSearchResponse {
 	return res
 }
 
-// GetLocationDetail ロケーションの詳細情報を取得する
-func GetLocationDetail(c echo.Context, placeID string) maps.PlaceDetailsResult {
+// getLocationDetail ロケーションの詳細情報を取得する
+func getLocationDetail(c echo.Context, placeID string) maps.PlaceDetailsResult {
 	gmc := c.Get("gmc").(*maps.Client)
+
 	r := &maps.PlaceDetailsRequest{
 		PlaceID:  placeID,
 		Language: "ja",

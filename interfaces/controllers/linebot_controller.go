@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"virtual-travel/interfaces/googlemap"
 
 	"github.com/labstack/echo"
@@ -23,14 +22,9 @@ func ReplyByBot() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					replyMessage := googlemap.GetLocationURL(c, message.Text)
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMessage)).Do(); err != nil {
-						logrus.Fatalf("Error LINEBOT replying message: %v", err)
-					}
-				case *linebot.StickerMessage:
-					replyMessage := fmt.Sprintf(
-						"sticker id is %s, stickerResourceType is %s", message.StickerID, message.StickerResourceType)
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMessage)).Do(); err != nil {
+					// 複数メッセージは送信できないようなので先頭のみ取得する
+					locationURL := googlemap.GetLocationURLs(c, message.Text)[0]
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(locationURL)).Do(); err != nil {
 						logrus.Fatalf("Error LINEBOT replying message: %v", err)
 					}
 				}
