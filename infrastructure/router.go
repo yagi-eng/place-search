@@ -11,7 +11,7 @@ func Init(e *echo.Echo) {
 
 	e.POST("/linebot/callback", controllers.ReplyByBot())
 
-	g := e.Group("/googlemap/api")
+	g := e.Group("/api")
 	{
 		g.GET("/search", controllers.SearchLocations())
 	}

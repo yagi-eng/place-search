@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"log"
+	"virtual-travel/interfaces/googlemap"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -23,15 +23,15 @@ func ReplyByBot() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					replyMessage := message.Text
+					replyMessage := googlemap.SearchLocations(c, message.Text).Results[0].PlaceID
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMessage)).Do(); err != nil {
-						log.Print(err)
+						logrus.Fatalf("Error LINEBOT replying message: %v", err)
 					}
 				case *linebot.StickerMessage:
 					replyMessage := fmt.Sprintf(
 						"sticker id is %s, stickerResourceType is %s", message.StickerID, message.StickerResourceType)
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMessage)).Do(); err != nil {
-						log.Print(err)
+						logrus.Fatalf("Error LINEBOT replying message: %v", err)
 					}
 				}
 			}
