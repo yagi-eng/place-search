@@ -9,7 +9,9 @@ import (
 // Init ルーティング設定
 func Init(e *echo.Echo) {
 
-	g := e.Group("/api")
+	e.POST("/linebot/callback", controllers.ReplyByBot())
+
+	g := e.Group("/googlemap/api")
 	{
 		g.GET("/search", controllers.SearchLocations())
 	}

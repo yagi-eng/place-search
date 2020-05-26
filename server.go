@@ -26,7 +26,9 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.CORS())
+	// 肥大化したらLINEBOT部分とGoogleMap部分は別サービスとして切りだす
 	e.Use(middlewares.GoogleMapClient())
+	e.Use(middlewares.LineBotClient())
 
 	// Routes
 	infrastructure.Init(e)
