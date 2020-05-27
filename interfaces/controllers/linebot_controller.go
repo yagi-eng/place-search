@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"virtual-travel/interfaces/googlemap"
 
 	"github.com/labstack/echo"
@@ -22,7 +23,9 @@ func ReplyByBot() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					replyLocationURL(c, bot, event, message.Text)
+					// replyLocationURL(c, bot, event, message.Text)
+					fmt.Println(message.Text)
+					testCarousel(c, bot, event)
 				}
 			}
 		}
@@ -39,6 +42,30 @@ func replyLocationURL(c echo.Context, bot *linebot.Client, event *linebot.Event,
 	}
 
 	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMsg)).Do(); err != nil {
+		logrus.Fatalf("Error LINEBOT replying message: %v", err)
+	}
+}
+
+func testCarousel(c echo.Context, bot *linebot.Client, event *linebot.Event) {
+	resp := linebot.NewTemplateMessage(
+		"this is a carousel template with imageAspectRatio,  imageSize and imageBackgroundColor",
+		linebot.NewCarouselTemplate(
+			linebot.NewCarouselColumn(
+				"https://farm5.staticflickr.com/4849/45718165635_328355a940_m.jpg",
+				"this is menu",
+				"description",
+				linebot.NewURIAction("View detail", "http://example.com/page/111"),
+			).WithImageOptions("#FFFFFF"),
+			linebot.NewCarouselColumn(
+				"https://farm5.staticflickr.com/4849/45718165635_328355a940_m.jpg",
+				"this is menu",
+				"description",
+				linebot.NewURIAction("View detail", "http://example.com/page/111"),
+			).WithImageOptions("#FFFFFF"),
+		).WithImageOptions("rectangle", "cover"),
+	)
+
+	if _, err := bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
 		logrus.Fatalf("Error LINEBOT replying message: %v", err)
 	}
 }
