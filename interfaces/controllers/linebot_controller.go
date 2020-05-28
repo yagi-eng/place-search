@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"virtual-travel/interfaces/googlemap"
 
 	"github.com/labstack/echo"
@@ -23,9 +22,7 @@ func ReplyByBot() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					// replyLocationURL(c, bot, event, message.Text)
-					fmt.Println(message.Text)
-					testCarousel(c, bot, event)
+					replyPlaceURLByCarousel(c, bot, event, message.Text)
 				}
 			}
 		}
@@ -33,39 +30,33 @@ func ReplyByBot() echo.HandlerFunc {
 	}
 }
 
-func replyLocationURL(c echo.Context, bot *linebot.Client, event *linebot.Event, text string) {
-	locationURLs := googlemap.GetLocationURLs(c, text)
+func replyPlaceURLByCarousel(c echo.Context, bot *linebot.Client, event *linebot.Event, text string) {
+	placeDetails := googlemap.GetPlaceDetails(c, text)
 
-	replyMsg := "検索結果は0件でした"
-	if len(locationURLs) > 0 {
-		replyMsg = locationURLs[0]
+	if len(placeDetails) == 0 {
+		res := linebot.NewTextMessage("検索結果は0件でした")
+		if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
+			logrus.Fatalf("Error LINEBOT replying message: %v", err)
+		}
+		return
 	}
 
-	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMsg)).Do(); err != nil {
-		logrus.Fatalf("Error LINEBOT replying message: %v", err)
+	ccs := []*linebot.CarouselColumn{}
+	for _, pd := range placeDetails {
+		cc := linebot.NewCarouselColumn(
+			pd.Icon,
+			pd.Name,
+			pd.FormattedAddress,
+			linebot.NewURIAction("Google Map", pd.URL),
+		).WithImageOptions("#FFFFFF")
+		ccs = append(ccs, cc)
 	}
-}
 
-func testCarousel(c echo.Context, bot *linebot.Client, event *linebot.Event) {
-	resp := linebot.NewTemplateMessage(
-		"this is a carousel template with imageAspectRatio,  imageSize and imageBackgroundColor",
-		linebot.NewCarouselTemplate(
-			linebot.NewCarouselColumn(
-				"https://farm5.staticflickr.com/4849/45718165635_328355a940_m.jpg",
-				"this is menu",
-				"description",
-				linebot.NewURIAction("View detail", "http://example.com/page/111"),
-			).WithImageOptions("#FFFFFF"),
-			linebot.NewCarouselColumn(
-				"https://farm5.staticflickr.com/4849/45718165635_328355a940_m.jpg",
-				"this is menu",
-				"description",
-				linebot.NewURIAction("View detail", "http://example.com/page/111"),
-			).WithImageOptions("#FFFFFF"),
-		).WithImageOptions("rectangle", "cover"),
+	res := linebot.NewTemplateMessage(
+		"「"+text+"」の検索結果です",
+		linebot.NewCarouselTemplate(ccs...).WithImageOptions("rectangle", "cover"),
 	)
-
-	if _, err := bot.ReplyMessage(event.ReplyToken, resp).Do(); err != nil {
+	if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
 		logrus.Fatalf("Error LINEBOT replying message: %v", err)
 	}
 }
