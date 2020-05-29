@@ -26,6 +26,7 @@ func ReplyByBot() echo.HandlerFunc {
 				}
 			}
 		}
+
 		return nil
 	}
 }
@@ -47,7 +48,7 @@ func replyPlaceURLByCarousel(c echo.Context, bot *linebot.Client, event *linebot
 			pd.Icon,
 			pd.Name,
 			pd.FormattedAddress,
-			linebot.NewURIAction("Google Map", pd.URL),
+			linebot.NewURIAction("Open Google Map", pd.URL),
 		).WithImageOptions("#FFFFFF")
 		ccs = append(ccs, cc)
 	}
@@ -56,6 +57,7 @@ func replyPlaceURLByCarousel(c echo.Context, bot *linebot.Client, event *linebot
 		"「"+text+"」の検索結果です",
 		linebot.NewCarouselTemplate(ccs...).WithImageOptions("rectangle", "cover"),
 	)
+
 	if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
 		logrus.Fatalf("Error LINEBOT replying message: %v", err)
 	}

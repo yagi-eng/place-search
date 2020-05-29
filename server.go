@@ -12,10 +12,8 @@ import (
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		logrus.Fatal("Error loading .env: %v", err)
-	}
+	// Heroku上で動かすためエラー処理はしない
+	godotenv.Load()
 
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.SetFormatter(&logrus.JSONFormatter{})
