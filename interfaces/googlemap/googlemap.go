@@ -34,7 +34,8 @@ func searchPlaces(c echo.Context, q string) maps.PlacesSearchResponse {
 	r := &maps.TextSearchRequest{
 		Query:    q,
 		Language: "ja",
-		Region:   "ja",
+		Location: &maps.LatLng{Lat: 35.658517, Lng: 139.70133399999997}, // 渋谷
+		Radius:   50000,
 	}
 
 	res, err := gmc.TextSearch(context.Background(), r)
@@ -52,7 +53,6 @@ func getPlaceDetail(c echo.Context, placeID string) maps.PlaceDetailsResult {
 	r := &maps.PlaceDetailsRequest{
 		PlaceID:  placeID,
 		Language: "ja",
-		Region:   "ja",
 	}
 
 	res, err := gmc.PlaceDetails(context.Background(), r)
