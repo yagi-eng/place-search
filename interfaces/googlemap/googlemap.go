@@ -2,31 +2,41 @@ package googlemap
 
 import (
 	"context"
+	"os"
 
 	"github.com/labstack/echo"
 	"github.com/sirupsen/logrus"
 	"googlemaps.github.io/maps"
 )
 
-// GetPlaceDetails 検索結果のロケーションのURLを取得する
-func GetPlaceDetails(c echo.Context, q string) []maps.PlaceDetailsResult {
+// PhotoAPIURL Google Maps APIのURL
+// SDKでは画像をURL形式で取得できないためAPIを使用
+const PhotoAPIURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
+
+// GetPlaceDetailsAndPhotoURLs キーワードに基づき、プレイスの詳細情報を取得する
+func GetPlaceDetailsAndPhotoURLs(c echo.Context, q string) ([]maps.PlaceDetailsResult, []string) {
 	placeDetails := []maps.PlaceDetailsResult{}
+	placePhotoURLs := []string{}
 
 	places := searchPlaces(c, q)
 	for i, place := range places.Results {
-		placeID := place.PlaceID
-		placeDetail := getPlaceDetail(c, placeID)
-		placeDetails = append(placeDetails, placeDetail)
-
-		if i+1 == 3 {
+		// 最大3件取得
+		if i == 3 {
 			break
 		}
+
+		placeDetail := getPlaceDetail(c, place.PlaceID)
+		placeDetails = append(placeDetails, placeDetail)
+
+		photoReference := place.Photos[0].PhotoReference
+		placePhotoURL := PhotoAPIURL + photoReference + "&key=" + os.Getenv("GMAP_API_KEY")
+		placePhotoURLs = append(placePhotoURLs, placePhotoURL)
 	}
 
-	return placeDetails
+	return placeDetails, placePhotoURLs
 }
 
-// searchPlaces キーワードに基づきロケーションを検索する
+// searchPlaces キーワードに基づき、プレイスを検索する
 // 単独での使用を想定して第一引数には echo.Context を渡す
 func searchPlaces(c echo.Context, q string) maps.PlacesSearchResponse {
 	gmc := c.Get("gmc").(*maps.Client)
@@ -45,7 +55,7 @@ func searchPlaces(c echo.Context, q string) maps.PlacesSearchResponse {
 	return res
 }
 
-// getPlaceDetail ロケーションの詳細情報を取得する
+// getPlaceDetail プレイスの詳細情報を取得する
 // 単独での使用を想定して第一引数には echo.Context を渡す
 func getPlaceDetail(c echo.Context, placeID string) maps.PlaceDetailsResult {
 	gmc := c.Get("gmc").(*maps.Client)

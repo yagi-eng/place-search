@@ -22,7 +22,7 @@ func ReplyByBot() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					replyPlaceURLByCarousel(c, bot, event, message.Text)
+					replyPlaceDetails(c, bot, event, message.Text)
 				}
 			}
 		}
@@ -31,8 +31,8 @@ func ReplyByBot() echo.HandlerFunc {
 	}
 }
 
-func replyPlaceURLByCarousel(c echo.Context, bot *linebot.Client, event *linebot.Event, text string) {
-	placeDetails := googlemap.GetPlaceDetails(c, text)
+func replyPlaceDetails(c echo.Context, bot *linebot.Client, event *linebot.Event, text string) {
+	placeDetails, placePhotoURLs := googlemap.GetPlaceDetailsAndPhotoURLs(c, text)
 
 	if len(placeDetails) == 0 {
 		res := linebot.NewTextMessage("検索結果は0件でした")
@@ -43,9 +43,9 @@ func replyPlaceURLByCarousel(c echo.Context, bot *linebot.Client, event *linebot
 	}
 
 	ccs := []*linebot.CarouselColumn{}
-	for _, pd := range placeDetails {
+	for i, pd := range placeDetails {
 		cc := linebot.NewCarouselColumn(
-			pd.Icon,
+			placePhotoURLs[i],
 			pd.Name,
 			pd.FormattedAddress,
 			linebot.NewURIAction("Open Google Map", pd.URL),
