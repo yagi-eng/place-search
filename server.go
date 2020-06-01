@@ -32,12 +32,6 @@ func main() {
 	// Routes
 	infrastructure.Init(e)
 
-	// Heroku用にPORT番号を環境変数から取得する
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
 	// Start server
-	e.Logger.Fatal(e.Start(":" + port))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
 }
