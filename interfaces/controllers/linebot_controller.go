@@ -1,15 +1,15 @@
 package controllers
 
 import (
-	"virtual-travel/interfaces/googlemap"
+	"virtual-travel/interfaces/botreply"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"
 )
 
-// ReplyByBot LINEBOTに関する処理
-func ReplyByBot() echo.HandlerFunc {
+// CatchEvents LINEBOTに関する処理
+func CatchEvents() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		bot := c.Get("lbc").(*linebot.Client)
 
@@ -22,43 +22,11 @@ func ReplyByBot() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					replyPlaceDetails(c, bot, event, message.Text)
+					botreply.GetPlaceDetails(c, bot, event, message.Text)
 				}
 			}
 		}
 
 		return nil
-	}
-}
-
-func replyPlaceDetails(c echo.Context, bot *linebot.Client, event *linebot.Event, text string) {
-	placeDetails, placePhotoURLs := googlemap.GetPlaceDetailsAndPhotoURLs(c, text)
-
-	if len(placeDetails) == 0 {
-		res := linebot.NewTextMessage("検索結果は0件でした")
-		if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
-			logrus.Fatalf("Error LINEBOT replying message: %v", err)
-		}
-		return
-	}
-
-	ccs := []*linebot.CarouselColumn{}
-	for i, pd := range placeDetails {
-		cc := linebot.NewCarouselColumn(
-			placePhotoURLs[i],
-			pd.Name,
-			pd.FormattedAddress,
-			linebot.NewURIAction("Open Google Map", pd.URL),
-		).WithImageOptions("#FFFFFF")
-		ccs = append(ccs, cc)
-	}
-
-	res := linebot.NewTemplateMessage(
-		"「"+text+"」の検索結果です",
-		linebot.NewCarouselTemplate(ccs...).WithImageOptions("rectangle", "cover"),
-	)
-
-	if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
-		logrus.Fatalf("Error LINEBOT replying message: %v", err)
 	}
 }

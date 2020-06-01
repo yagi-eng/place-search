@@ -9,6 +9,6 @@ import (
 // Init ルーティング設定
 func Init(e *echo.Echo) {
 
-	e.POST("/linebot/callback", controllers.ReplyByBot())
+	e.POST("/linebot/callback", controllers.CatchEvents())
 
 }
