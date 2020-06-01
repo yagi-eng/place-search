@@ -24,6 +24,11 @@ func CatchEvents() echo.HandlerFunc {
 				case *linebot.TextMessage:
 					botreply.GetPlaceDetails(c, bot, event, message.Text)
 				}
+			} else if event.Type == linebot.EventTypePostback {
+				res := linebot.NewTextMessage("お気に入りに追加しました！（してない）")
+				if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
+					logrus.Fatalf("Error LINEBOT replying message: %v", err)
+				}
 			}
 		}
 
