@@ -9,6 +9,9 @@ import (
 	"googlemaps.github.io/maps"
 )
 
+// maxDetails プレイスの詳細情報の最大取得件数
+const maxDetails = 3
+
 // PhotoAPIURL Google Maps APIのURL
 // SDKでは画像をURL形式で取得できないためAPIを使用
 const PhotoAPIURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
@@ -20,16 +23,14 @@ func GetPlaceDetailsAndPhotoURLs(c echo.Context, q string) ([]maps.PlaceDetailsR
 
 	places := searchPlaces(c, q)
 	for i, place := range places.Results {
-		// 最大3件取得
-		if i == 3 {
+		if i == maxDetails {
 			break
 		}
 
 		placeDetail := getPlaceDetail(c, place.PlaceID)
 		placeDetails = append(placeDetails, placeDetail)
 
-		photoReference := place.Photos[0].PhotoReference
-		placePhotoURL := PhotoAPIURL + photoReference + "&key=" + os.Getenv("GMAP_API_KEY")
+		placePhotoURL := getPlacePhotoURL(place.Photos[0].PhotoReference)
 		placePhotoURLs = append(placePhotoURLs, placePhotoURL)
 	}
 
@@ -70,4 +71,9 @@ func getPlaceDetail(c echo.Context, placeID string) maps.PlaceDetailsResult {
 		logrus.Fatal("Error GoogleMap PlaceDetails: %v", err)
 	}
 	return res
+}
+
+// getPlacePhotoURL プレイスの写真のURLを取得する
+func getPlacePhotoURL(photoReference string) string {
+	return PhotoAPIURL + photoReference + "&key=" + os.Getenv("GMAP_API_KEY")
 }
