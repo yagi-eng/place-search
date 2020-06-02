@@ -12,8 +12,12 @@ import (
 )
 
 func init() {
-	// Heroku上で動かすためエラー処理はしない
-	godotenv.Load()
+	if os.Getenv("ISPRD") == "" {
+		err := godotenv.Load(".env.local")
+		if err != nil {
+			logrus.Fatalf("Error loading env: %v", err)
+		}
+	}
 
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.SetFormatter(&logrus.JSONFormatter{})

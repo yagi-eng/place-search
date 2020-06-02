@@ -13,7 +13,12 @@ import (
 // Connect DB接続
 func Connect() (db *gorm.DB, err error) {
 
-	err = godotenv.Load()
+	if os.Getenv("ISPRD") == "" {
+		err := godotenv.Load(".env.local")
+		if err != nil {
+			logrus.Fatalf("Error loading env: %v", err)
+		}
+	}
 
 	db, err = gorm.Open("mysql",
 		os.Getenv("DB_USERNAME")+":"+os.Getenv("DB_USERPASS")+
