@@ -1,7 +1,7 @@
 package main
 
 import (
-	"virtual-travel/domain"
+	"virtual-travel/domain/model"
 	"virtual-travel/infrastructure/database"
 
 	"github.com/sirupsen/logrus"
@@ -15,6 +15,6 @@ func main() {
 		logrus.Fatal(err)
 	}
 
-	db.Debug().AutoMigrate(&domain.User{})
-	db.Debug().AutoMigrate(&domain.Favorite{})
+	db.Debug().AutoMigrate(&model.User{})
+	db.Debug().AutoMigrate(&model.Favorite{})
 }
