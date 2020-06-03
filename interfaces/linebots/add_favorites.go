@@ -13,10 +13,10 @@ var uc usecase.IUserCreateUseCase
 // AddFavorites お気に入りリストに追加する
 func AddFavorites(c echo.Context, bot *linebot.Client, event *linebot.Event) {
 	LineUserID := event.Source.UserID
-
 	input := usecase.UserCreateInput{
 		LineUserID: LineUserID,
 	}
+
 	uc.Handle(input)
 
 	res := linebot.NewTextMessage("お気に入りに追加しました！（してない）")

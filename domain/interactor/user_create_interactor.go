@@ -5,13 +5,13 @@ import (
 	"virtual-travel/usecase"
 )
 
-// UserCreateInteractor ユーザ登録インタラクター
+// UserCreateInteractor ユーザ登録インタラクタ
 type userCreateInteractor struct {
 	repo repository.IUserRepository
 }
 
 // Handle ユーザを登録する
 func (ir *userCreateInteractor) Handle(in usecase.UserCreateInput) {
-	userLineID := in.LineUserID
-	ir.repo.Save(userLineID)
+	LineUserID := in.LineUserID
+	ir.repo.Save(LineUserID)
 }
