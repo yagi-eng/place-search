@@ -1,4 +1,4 @@
-package botreply
+package linebots
 
 import (
 	"virtual-travel/interfaces/googlemap"

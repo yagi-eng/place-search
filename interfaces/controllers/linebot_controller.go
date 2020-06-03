@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"virtual-travel/interfaces/botreply"
+	"virtual-travel/interfaces/linebots"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -22,7 +22,7 @@ func CatchEvents() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					botreply.GetPlaceDetails(c, bot, event, message.Text)
+					linebots.GetPlaceDetails(c, bot, event, message.Text)
 				}
 			} else if event.Type == linebot.EventTypePostback {
 				res := linebot.NewTextMessage("お気に入りに追加しました！（してない）")
