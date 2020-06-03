@@ -6,12 +6,12 @@ import (
 )
 
 // UserCreateInteractor ユーザ登録インタラクター
-type UserCreateInteractor struct {
+type userCreateInteractor struct {
 	repo repository.IUserRepository
 }
 
-// Save ユーザを登録する
-func (ir *UserCreateInteractor) Save(in usecase.UserCreateInput) {
+// Handle ユーザを登録する
+func (ir *userCreateInteractor) Handle(in usecase.UserCreateInput) {
 	userLineID := in.LineUserID
 	ir.repo.Save(userLineID)
 }
