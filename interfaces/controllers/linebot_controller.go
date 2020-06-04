@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"virtual-travel/domain/interactor"
 	"virtual-travel/infrastructure/database"
 	"virtual-travel/interfaces/linebots"
 	"virtual-travel/usecase"
+	"virtual-travel/usecase/interactor"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
@@ -14,13 +14,14 @@ import (
 
 // LinebotController LINEBOTコントローラ
 type LinebotController struct {
-	Interactor usecase.IUserCreateUseCase
+	Interactor usecase.IUserUseCase
 }
 
 // NewLinebotController コンストラクタ
+// TODO DIを導入して逆向きの依存を解消する
 func NewLinebotController(db *gorm.DB) *LinebotController {
 	return &LinebotController{
-		Interactor: &interactor.UserCreateInteractor{
+		Interactor: &interactor.UserInteractor{
 			Repo: &database.UserRepository{
 				DB: db,
 			},

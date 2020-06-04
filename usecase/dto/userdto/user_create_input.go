@@ -1,4 +1,4 @@
-package usecase
+package userdto
 
 // UserCreateInput DTO
 type UserCreateInput struct {
