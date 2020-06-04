@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"virtual-travel/infrastructure"
+	"virtual-travel/infrastructure/database"
 	"virtual-travel/infrastructure/middlewares"
 
 	"github.com/joho/godotenv"
@@ -31,10 +32,16 @@ func main() {
 	e.Use(middleware.CORS())
 	e.Use(middlewares.GoogleMapClient())
 	e.Use(middlewares.LineBotClient())
-	// e.Use(middlewares.DatabaseService())
+
+	// TODO mainで宣言しないようにする、現状はcloseのためにmainで宣言
+	// DB Connect
+	db, _ := database.Connect()
+	defer db.Close()
+	// output sql query
+	db.LogMode(true)
 
 	// Routes
-	infrastructure.Init(e)
+	infrastructure.Init(db, e)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
