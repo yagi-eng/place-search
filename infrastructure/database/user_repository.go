@@ -6,18 +6,13 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// userRepository ユーザレポジトリ
+// UserRepository ユーザレポジトリ
 type UserRepository struct {
 	DB *gorm.DB
 }
 
+// Save ユーザ登録
 func (repo *UserRepository) Save(LineUserID string) {
-	repo.DB, _ = Connect()
-	defer repo.DB.Close()
-
-	// output sql query
-	repo.DB.LogMode(true)
-
 	user := model.User{}
 	if repo.DB.Table("users").
 		Where(model.User{LineUserID: LineUserID}).First(&user).RecordNotFound() {

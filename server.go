@@ -31,7 +31,7 @@ func main() {
 	e.Use(middleware.CORS())
 	e.Use(middlewares.GoogleMapClient())
 	e.Use(middlewares.LineBotClient())
-	e.Use(middlewares.DatabaseService())
+	// e.Use(middlewares.DatabaseService())
 
 	// Routes
 	infrastructure.Init(e)
