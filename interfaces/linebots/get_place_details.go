@@ -29,7 +29,7 @@ func GetPlaceDetails(c echo.Context, bot *linebot.Client, event *linebot.Event, 
 			pd.Name,
 			pd.FormattedAddress,
 			linebot.NewURIAction("Open Google Map", pd.URL),
-			linebot.NewPostbackAction("Add to my favorites", "action=favoriite&placeid="+pd.PlaceID, "", ""),
+			linebot.NewPostbackAction("Add to my favorites", "action=favorite&placeId="+pd.PlaceID, "", ""),
 		).WithImageOptions("#FFFFFF")
 		ccs = append(ccs, cc)
 	}

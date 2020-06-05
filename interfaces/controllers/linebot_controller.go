@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"strings"
 	"virtual-travel/interfaces/linebots"
 	"virtual-travel/usecase"
 
@@ -36,10 +37,27 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 					linebots.GetPlaceDetails(c, bot, event, message.Text)
 				}
 			} else if event.Type == linebot.EventTypePostback {
-				linebots.AddFavorites(controller.interactor, bot, event)
+				dataMap := createDataMap(event.Postback.Data)
+
+				if dataMap["action"] == "favorite" {
+					placeID := dataMap["placeId"]
+					linebots.AddFavorites(controller.interactor, bot, event, placeID)
+				}
 			}
 		}
 
 		return nil
 	}
+}
+
+func createDataMap(q string) map[string]string {
+	dataMap := make(map[string]string)
+
+	dataArr := strings.Split(q, "&")
+	for _, data := range dataArr {
+		splitedData := strings.Split(data, "=")
+		dataMap[splitedData[0]] = splitedData[1]
+	}
+
+	return dataMap
 }

@@ -9,7 +9,7 @@ import (
 )
 
 // AddFavorites お気に入りリストに追加する
-func AddFavorites(interactor usecase.IUserUseCase, bot *linebot.Client, event *linebot.Event) {
+func AddFavorites(interactor usecase.IUserUseCase, bot *linebot.Client, event *linebot.Event, placeID string) {
 	LineUserID := event.Source.UserID
 	input := userdto.UserCreateInput{
 		LineUserID: LineUserID,
