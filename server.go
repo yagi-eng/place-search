@@ -32,7 +32,6 @@ func main() {
 	e.Use(middlewares.GoogleMapClient())
 	e.Use(middlewares.LineBotClient())
 
-	// TODO mainで宣言しないようにする、現状はcloseのためにmainで宣言
 	// DB Connect
 	db, _ := database.Connect()
 	defer db.Close()

@@ -5,7 +5,7 @@ import (
 	"virtual-travel/usecase/dto/userdto"
 )
 
-// UserInteractor ユーザ登録インタラクタ
+// UserInteractor ユーザインタラクタ
 type UserInteractor struct {
 	repository repository.IUserRepository
 }
