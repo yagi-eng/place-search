@@ -16,11 +16,18 @@ import (
 )
 
 var superSet = wire.NewSet(
+	database.NewFavoriteRepository,
+	wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)),
 	database.NewUserRepository,
 	wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)),
+
 	interactor.NewUserInteractor,
 	wire.Bind(new(usecase.IUserUseCase), new(*interactor.UserInteractor)),
+	interactor.NewFavoriteInteractor,
+	wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)),
+
 	controllers.NewLinebotController,
+
 	infrastructure.NewRouter,
 )
 
