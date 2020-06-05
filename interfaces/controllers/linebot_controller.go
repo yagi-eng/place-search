@@ -12,12 +12,12 @@ import (
 
 // LinebotController LINEBOTコントローラ
 type LinebotController struct {
-	interactor usecase.IUserUseCase
+	userinteractor usecase.IUserUseCase
 }
 
 // NewLinebotController コンストラクタ
-func NewLinebotController(interactor usecase.IUserUseCase) *LinebotController {
-	return &LinebotController{interactor: interactor}
+func NewLinebotController(userinteractor usecase.IUserUseCase) *LinebotController {
+	return &LinebotController{userinteractor: userinteractor}
 }
 
 // CatchEvents LINEBOTに関する処理
@@ -41,7 +41,7 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 
 				if dataMap["action"] == "favorite" {
 					placeID := dataMap["placeId"]
-					linebots.AddFavorites(controller.interactor, bot, event, placeID)
+					linebots.AddFavorites(controller.userinteractor, bot, event, placeID)
 				}
 			}
 		}

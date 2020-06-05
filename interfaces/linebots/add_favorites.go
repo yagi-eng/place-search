@@ -9,15 +9,16 @@ import (
 )
 
 // AddFavorites お気に入りリストに追加する
-func AddFavorites(interactor usecase.IUserUseCase, bot *linebot.Client, event *linebot.Event, placeID string) {
-	LineUserID := event.Source.UserID
+func AddFavorites(UserInteractor usecase.IUserUseCase, bot *linebot.Client, event *linebot.Event, placeID string) {
+
+	lineUserID := event.Source.UserID
 	input := userdto.UserCreateInput{
-		LineUserID: LineUserID,
+		LineUserID: lineUserID,
 	}
 
-	interactor.Create(input)
+	userID := UserInteractor.Create(input)
 
-	res := linebot.NewTextMessage("お気に入りに追加しました！（してない）")
+	res := linebot.NewTextMessage("お気に入りに追加しました！")
 	if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
 		logrus.Fatalf("Error LINEBOT replying message: %v", err)
 	}
