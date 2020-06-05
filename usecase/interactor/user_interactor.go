@@ -7,11 +7,16 @@ import (
 
 // UserInteractor ユーザ登録インタラクタ
 type UserInteractor struct {
-	Repo repository.IUserRepository
+	repo repository.IUserRepository
+}
+
+// NewUserInteractor コンストラクタ
+func NewUserInteractor(repo repository.IUserRepository) *UserInteractor {
+	return &UserInteractor{repo: repo}
 }
 
 // Create ユーザを登録する
 func (ir *UserInteractor) Create(in userdto.UserCreateInput) {
 	LineUserID := in.LineUserID
-	ir.Repo.Save(LineUserID)
+	ir.repo.Save(LineUserID)
 }

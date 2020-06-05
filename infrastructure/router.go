@@ -7,9 +7,23 @@ import (
 	"github.com/labstack/echo"
 )
 
-// Init ルーティング設定
-func Init(db *gorm.DB, e *echo.Echo) {
-	linebotController := controllers.NewLinebotController(db)
+// Router ルーティング
+type Router struct {
+	e  *echo.Echo
+	db *gorm.DB
+	c  *controllers.LinebotController
+}
 
-	e.POST("/linebot/callback", linebotController.CatchEvents())
+// NewRouter コンストラクタ
+func NewRouter(e *echo.Echo, db *gorm.DB, c *controllers.LinebotController) *Router {
+	return &Router{
+		e:  e,
+		db: db,
+		c:  c,
+	}
+}
+
+// Init ルーティング設定
+func (r *Router) Init() {
+	r.e.POST("/linebot/callback", r.c.CatchEvents())
 }

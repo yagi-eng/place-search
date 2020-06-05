@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"virtual-travel/infrastructure"
 	"virtual-travel/infrastructure/database"
 	"virtual-travel/infrastructure/middlewares"
 
@@ -41,7 +40,8 @@ func main() {
 	db.LogMode(true)
 
 	// Routes
-	infrastructure.Init(db, e)
+	r := Initialize(e, db)
+	r.Init()
 
 	// Start server
 	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))

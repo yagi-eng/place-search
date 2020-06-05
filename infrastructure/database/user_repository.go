@@ -8,16 +8,21 @@ import (
 
 // UserRepository ユーザレポジトリ
 type UserRepository struct {
-	DB *gorm.DB
+	db *gorm.DB
+}
+
+// NewUserRepository コンストラクタ
+func NewUserRepository(db *gorm.DB) *UserRepository {
+	return &UserRepository{db: db}
 }
 
 // Save ユーザ登録
 func (repo *UserRepository) Save(LineUserID string) {
 	user := model.User{}
-	if repo.DB.Table("users").
+	if repo.db.Table("users").
 		Where(model.User{LineUserID: LineUserID}).First(&user).RecordNotFound() {
 
 		user = model.User{LineUserID: LineUserID}
-		repo.DB.Create(&user)
+		repo.db.Create(&user)
 	}
 }

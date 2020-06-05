@@ -1,12 +1,9 @@
 package controllers
 
 import (
-	"virtual-travel/infrastructure/database"
 	"virtual-travel/interfaces/linebots"
 	"virtual-travel/usecase"
-	"virtual-travel/usecase/interactor"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"
@@ -14,19 +11,12 @@ import (
 
 // LinebotController LINEBOTコントローラ
 type LinebotController struct {
-	Interactor usecase.IUserUseCase
+	interactor usecase.IUserUseCase
 }
 
 // NewLinebotController コンストラクタ
-// TODO DIを導入して逆向きの依存を解消する
-func NewLinebotController(db *gorm.DB) *LinebotController {
-	return &LinebotController{
-		Interactor: &interactor.UserInteractor{
-			Repo: &database.UserRepository{
-				DB: db,
-			},
-		},
-	}
+func NewLinebotController(interactor usecase.IUserUseCase) *LinebotController {
+	return &LinebotController{interactor: interactor}
 }
 
 // CatchEvents LINEBOTに関する処理
@@ -46,7 +36,7 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 					linebots.GetPlaceDetails(c, bot, event, message.Text)
 				}
 			} else if event.Type == linebot.EventTypePostback {
-				linebots.AddFavorites(controller.Interactor, bot, event)
+				linebots.AddFavorites(controller.interactor, bot, event)
 			}
 		}
 
