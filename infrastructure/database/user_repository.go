@@ -17,12 +17,12 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 }
 
 // Save ユーザ登録
-func (repo *UserRepository) Save(LineUserID string) {
+func (repository *UserRepository) Save(LineUserID string) {
 	user := model.User{}
-	if repo.db.Table("users").
+	if repository.db.Table("users").
 		Where(model.User{LineUserID: LineUserID}).First(&user).RecordNotFound() {
 
 		user = model.User{LineUserID: LineUserID}
-		repo.db.Create(&user)
+		repository.db.Create(&user)
 	}
 }
