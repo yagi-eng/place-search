@@ -1,7 +1,7 @@
 package linebots
 
 import (
-	"virtual-travel/interfaces/googlemap"
+	"virtual-travel/interfaces/gateway/googlemap"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"

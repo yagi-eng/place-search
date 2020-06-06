@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"strings"
-	"virtual-travel/interfaces/linebots"
+	"virtual-travel/interfaces/controllers/linebots"
 	"virtual-travel/usecase"
 
 	"github.com/labstack/echo"
