@@ -3,16 +3,16 @@ package linebots
 import (
 	"virtual-travel/interfaces/gateway/googlemap"
 
-	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"
+	"googlemaps.github.io/maps"
 )
 
 const spot = " 観光地"
 
 // GetPlaceDetails プレイスの詳細情報を取得して応答する
-func GetPlaceDetails(c echo.Context, bot *linebot.Client, event *linebot.Event, q string) {
-	placeDetails, placePhotoURLs := googlemap.GetPlaceDetailsAndPhotoURLs(c, q+spot)
+func GetPlaceDetails(gm *maps.Client, bot *linebot.Client, event *linebot.Event, q string) {
+	placeDetails, placePhotoURLs := googlemap.GetPlaceDetailsAndPhotoURLs(gm, q+spot)
 
 	if len(placeDetails) == 0 {
 		res := linebot.NewTextMessage("検索結果は0件でした")

@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 
-	"github.com/labstack/echo"
 	"github.com/sirupsen/logrus"
 	"googlemaps.github.io/maps"
 )
@@ -17,17 +16,17 @@ const maxDetails = 3
 const PhotoAPIURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
 
 // GetPlaceDetailsAndPhotoURLs キーワードに基づき、プレイスの詳細情報を取得する
-func GetPlaceDetailsAndPhotoURLs(c echo.Context, q string) ([]maps.PlaceDetailsResult, []string) {
+func GetPlaceDetailsAndPhotoURLs(gm *maps.Client, q string) ([]maps.PlaceDetailsResult, []string) {
 	placeDetails := []maps.PlaceDetailsResult{}
 	placePhotoURLs := []string{}
 
-	places := searchPlaces(c, q)
+	places := searchPlaces(gm, q)
 	for i, place := range places.Results {
 		if i == maxDetails {
 			break
 		}
 
-		placeDetail := getPlaceDetail(c, place.PlaceID)
+		placeDetail := getPlaceDetail(gm, place.PlaceID)
 		placeDetails = append(placeDetails, placeDetail)
 
 		placePhotoURL := getPlacePhotoURL(place.Photos[0].PhotoReference)
@@ -39,9 +38,7 @@ func GetPlaceDetailsAndPhotoURLs(c echo.Context, q string) ([]maps.PlaceDetailsR
 
 // searchPlaces キーワードに基づき、プレイスを検索する
 // 単独での使用を想定して第一引数には echo.Context を渡す
-func searchPlaces(c echo.Context, q string) maps.PlacesSearchResponse {
-	gmc := c.Get("gmc").(*maps.Client)
-
+func searchPlaces(gm *maps.Client, q string) maps.PlacesSearchResponse {
 	r := &maps.TextSearchRequest{
 		Query:    q,
 		Language: "ja",
@@ -49,7 +46,7 @@ func searchPlaces(c echo.Context, q string) maps.PlacesSearchResponse {
 		Radius:   50000,
 	}
 
-	res, err := gmc.TextSearch(context.Background(), r)
+	res, err := gm.TextSearch(context.Background(), r)
 	if err != nil {
 		logrus.Fatal("Error GoogleMap TextSearch: %v", err)
 	}
@@ -58,15 +55,13 @@ func searchPlaces(c echo.Context, q string) maps.PlacesSearchResponse {
 
 // getPlaceDetail プレイスの詳細情報を取得する
 // 単独での使用を想定して第一引数には echo.Context を渡す
-func getPlaceDetail(c echo.Context, placeID string) maps.PlaceDetailsResult {
-	gmc := c.Get("gmc").(*maps.Client)
-
+func getPlaceDetail(gm *maps.Client, placeID string) maps.PlaceDetailsResult {
 	r := &maps.PlaceDetailsRequest{
 		PlaceID:  placeID,
 		Language: "ja",
 	}
 
-	res, err := gmc.PlaceDetails(context.Background(), r)
+	res, err := gm.PlaceDetails(context.Background(), r)
 	if err != nil {
 		logrus.Fatal("Error GoogleMap PlaceDetails: %v", err)
 	}

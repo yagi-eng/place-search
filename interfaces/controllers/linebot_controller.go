@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"
+	"googlemaps.github.io/maps"
 )
 
 // LinebotController LINEBOTコントローラ
@@ -38,7 +39,8 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					linebots.GetPlaceDetails(c, bot, event, message.Text)
+					gm := c.Get("gmc").(*maps.Client)
+					linebots.GetPlaceDetails(gm, bot, event, message.Text)
 				}
 			} else if event.Type == linebot.EventTypePostback {
 				dataMap := createDataMap(event.Postback.Data)
