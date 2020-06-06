@@ -16,8 +16,10 @@ func NewFavoriteInteractor(repository repository.IFavoriteRepository) *FavoriteI
 }
 
 // Add お気に入りを追加する
-func (interactor *FavoriteInteractor) Add(in favoritedto.FavoriteAddInput) {
+func (interactor *FavoriteInteractor) Add(in favoritedto.FavoriteAddInput) favoritedto.FavoriteAddOutput {
 	UserID := in.UserID
 	PlaceID := in.PlaceID
-	interactor.repository.Save(UserID, PlaceID)
+	isAlreadyAdded := interactor.repository.Save(UserID, PlaceID)
+
+	return favoritedto.FavoriteAddOutput{IsAlreadyAdded: isAlreadyAdded}
 }

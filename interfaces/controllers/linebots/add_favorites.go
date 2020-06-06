@@ -9,6 +9,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const msgNotAdd = "お気に入りに追加できませんでした。再度登録をお願いしますm(__)m"
+const msgAlreadyAdd = "既に追加済みです！"
+const msgAdd = "お気に入りに追加しました！"
+
 // AddFavorites お気に入りリストに追加する
 func AddFavorites(UserInteractor usecase.IUserUseCase, FavoriteInteractor usecase.IFavoriteUseCase,
 	bot *linebot.Client, event *linebot.Event, placeID string) {
@@ -19,15 +23,32 @@ func AddFavorites(UserInteractor usecase.IUserUseCase, FavoriteInteractor usecas
 	}
 
 	userCreateOutput := UserInteractor.Create(userCreateInput)
+	userID := userCreateOutput.UserID
+
+	if userID == 0 {
+		replyMessage(bot, msgNotAdd, event.ReplyToken)
+		return
+	}
 
 	favoriteAddInput := favoritedto.FavoriteAddInput{
-		UserID:  userCreateOutput.UserID,
+		UserID:  userID,
 		PlaceID: placeID,
 	}
-	FavoriteInteractor.Add(favoriteAddInput)
 
-	res := linebot.NewTextMessage("お気に入りに追加しました！")
-	if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
+	favoriteAddOutput := FavoriteInteractor.Add(favoriteAddInput)
+	isAlreadyAdded := favoriteAddOutput.IsAlreadyAdded
+
+	if isAlreadyAdded {
+		replyMessage(bot, msgAlreadyAdd, event.ReplyToken)
+		return
+	}
+
+	replyMessage(bot, msgAdd, event.ReplyToken)
+}
+
+func replyMessage(bot *linebot.Client, msg string, replyToken string) {
+	res := linebot.NewTextMessage(msg)
+	if _, err := bot.ReplyMessage(replyToken, res).Do(); err != nil {
 		logrus.Fatalf("Error LINEBOT replying message: %v", err)
 	}
 }
