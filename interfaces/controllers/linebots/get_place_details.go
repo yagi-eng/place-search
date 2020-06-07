@@ -27,7 +27,7 @@ func GetPlaceDetails(gm *maps.Client, bot *linebot.Client, event *linebot.Event,
 		cc := linebot.NewCarouselColumn(
 			placePhotoURLs[i],
 			pd.Name,
-			pd.FormattedAddress,
+			string([]rune(pd.FormattedAddress)[:60]),
 			linebot.NewURIAction("Open Google Map", pd.URL),
 			linebot.NewPostbackAction("Add to my favorites", "action=favorite&placeId="+pd.PlaceID, "", ""),
 		).WithImageOptions("#FFFFFF")

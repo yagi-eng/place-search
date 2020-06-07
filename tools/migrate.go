@@ -1,13 +1,22 @@
 package main
 
 import (
+	"os"
 	"virtual-travel/domain/model"
 	"virtual-travel/infrastructure/database"
 
+	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
+	if os.Getenv("ISPRD") == "" {
+		err := godotenv.Load(".env.local")
+		if err != nil {
+			logrus.Fatalf("Error loading env: %v", err)
+		}
+	}
+
 	db, err := database.Connect()
 	defer db.Close()
 
