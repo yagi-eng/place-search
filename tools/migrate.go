@@ -11,7 +11,7 @@ import (
 
 func main() {
 	if os.Getenv("ISPRD") == "" {
-		err := godotenv.Load(".env.local")
+		err := godotenv.Load(".env")
 		if err != nil {
 			logrus.Fatalf("Error loading env: %v", err)
 		}
