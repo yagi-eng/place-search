@@ -15,7 +15,6 @@ import (
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
-	"googlemaps.github.io/maps"
 )
 
 var superSet = wire.NewSet(
@@ -36,7 +35,7 @@ var superSet = wire.NewSet(
 )
 
 // Initialize DI
-func Initialize(e *echo.Echo, db *gorm.DB, gmc *maps.Client) *infrastructure.Router {
+func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 	wire.Build(superSet)
 	return &infrastructure.Router{}
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
-	"googlemaps.github.io/maps"
 	"virtual-travel/domain/repository"
 	"virtual-travel/infrastructure"
 	"virtual-travel/infrastructure/database"
@@ -22,10 +21,10 @@ import (
 
 // Injectors from wire.go:
 
-func Initialize(e *echo.Echo, db *gorm.DB, gmc *maps.Client) *infrastructure.Router {
+func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 	userRepository := database.NewUserRepository(db)
 	favoriteRepository := database.NewFavoriteRepository(db)
-	googleMapGateway := gateway.NewGoogleMapGateway(gmc)
+	googleMapGateway := gateway.NewGoogleMapGateway()
 	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway)
 	linebotController := controllers.NewLinebotController(favoriteInteractor)
 	router := infrastructure.NewRouter(e, linebotController)

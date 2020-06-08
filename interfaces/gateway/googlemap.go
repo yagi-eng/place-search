@@ -14,7 +14,12 @@ type GoogleMapGateway struct {
 }
 
 // NewGoogleMapGateway コンストラクタ
-func NewGoogleMapGateway(gmc *maps.Client) *GoogleMapGateway {
+func NewGoogleMapGateway() *GoogleMapGateway {
+	apiKey := os.Getenv("GMAP_API_KEY")
+	gmc, err := maps.NewClient(maps.WithAPIKey(apiKey))
+	if err != nil {
+		logrus.Fatalf("Error creating GoogleMap client: %v", err)
+	}
 	return &GoogleMapGateway{gmc: gmc}
 }
 
