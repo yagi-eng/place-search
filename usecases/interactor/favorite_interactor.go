@@ -3,8 +3,8 @@ package interactor
 import (
 	"virtual-travel/domain/repository"
 	"virtual-travel/interfaces/presenter"
-	"virtual-travel/usecase/dto/favoritedto"
-	"virtual-travel/usecase/igateway"
+	"virtual-travel/usecases/dto/favoritedto"
+	"virtual-travel/usecases/igateway"
 )
 
 // FavoriteInteractor お気に入りインタラクタ

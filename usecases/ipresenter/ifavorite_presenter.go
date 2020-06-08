@@ -1,6 +1,6 @@
 package ipresenter
 
-import "virtual-travel/usecase/dto/favoritedto"
+import "virtual-travel/usecases/dto/favoritedto"
 
 // IFavoritePresenter お気に入りプレゼンター
 type IFavoritePresenter interface {

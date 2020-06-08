@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"strings"
-	"virtual-travel/usecase"
-	"virtual-travel/usecase/dto/favoritedto"
+	"virtual-travel/usecases/dto/favoritedto"
+	"virtual-travel/usecases/interactor/usecase"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"

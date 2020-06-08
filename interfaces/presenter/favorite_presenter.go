@@ -2,7 +2,7 @@ package presenter
 
 import (
 	"unicode/utf8"
-	"virtual-travel/usecase/dto/favoritedto"
+	"virtual-travel/usecases/dto/favoritedto"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"

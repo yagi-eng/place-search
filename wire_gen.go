@@ -15,9 +15,9 @@ import (
 	"virtual-travel/infrastructure/database"
 	"virtual-travel/interfaces/controllers"
 	"virtual-travel/interfaces/gateway"
-	"virtual-travel/usecase"
-	"virtual-travel/usecase/igateway"
-	"virtual-travel/usecase/interactor"
+	"virtual-travel/usecases/igateway"
+	"virtual-travel/usecases/interactor"
+	"virtual-travel/usecases/interactor/usecase"
 )
 
 // Injectors from wire.go:

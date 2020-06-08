@@ -1,6 +1,6 @@
 package usecase
 
-import "virtual-travel/usecase/dto/favoritedto"
+import "virtual-travel/usecases/dto/favoritedto"
 
 // IFavoriteUseCase お気に入りユースケース
 type IFavoriteUseCase interface {
