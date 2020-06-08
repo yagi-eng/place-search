@@ -48,7 +48,6 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 					msg := message.Text
 					if msg == "お気に入り" {
 						favoriteGetInput := favoritedto.GetInput{
-							Bot:        controller.bot,
 							ReplyToken: event.ReplyToken,
 							LineUserID: event.Source.UserID,
 						}
@@ -62,7 +61,6 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 
 				if dataMap["action"] == "favorite" {
 					favoriteAddInput := favoritedto.AddInput{
-						Bot:        controller.bot,
 						ReplyToken: event.ReplyToken,
 						LineUserID: event.Source.UserID,
 						PlaceID:    dataMap["placeId"],

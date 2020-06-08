@@ -42,7 +42,6 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 	isAlreadyAdded := interactor.favoriteRepository.Save(userID, in.PlaceID)
 
 	out := favoritedto.AddOutput{
-		Bot:            in.Bot,
 		ReplyToken:     in.ReplyToken,
 		IsSuccess:      isSuccess,
 		IsAlreadyAdded: isAlreadyAdded,
@@ -57,7 +56,6 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 	placeDetails, placePhotoURLs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLs(PlaceIDs, true)
 
 	out := favoritedto.GetOutput{
-		Bot:            in.Bot,
 		ReplyToken:     in.ReplyToken,
 		PlaceDetails:   placeDetails,
 		PlacePhotoURLs: placePhotoURLs,
