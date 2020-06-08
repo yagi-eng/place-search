@@ -2,6 +2,7 @@ package interactor
 
 import (
 	"virtual-travel/domain/repository"
+	"virtual-travel/interfaces/gateway/googlemap"
 	"virtual-travel/interfaces/presenter"
 	"virtual-travel/usecase/dto/favoritedto"
 )
@@ -21,7 +22,7 @@ func NewFavoriteInteractor(
 }
 
 // Add お気に入りを追加する
-func (interactor *FavoriteInteractor) Add(in favoritedto.FavoriteAddInput) {
+func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 	userID := interactor.userRepository.Save(in.LineUserID)
 
 	isSuccess := true
@@ -31,7 +32,7 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.FavoriteAddInput) {
 
 	isAlreadyAdded := interactor.favoriteRepository.Save(userID, in.PlaceID)
 
-	out := favoritedto.FavoriteAddOutput{
+	out := favoritedto.AddOutput{
 		Bot:            in.Bot,
 		ReplyToken:     in.ReplyToken,
 		IsSuccess:      isSuccess,
@@ -41,9 +42,17 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.FavoriteAddInput) {
 }
 
 // Get お気に入り全件を取得する
-func (interactor *FavoriteInteractor) Get(in favoritedto.FavoriteGetInput) favoritedto.FavoriteGetOutput {
-	LineUserID := in.LineUserID
-	PlaceIDs := interactor.favoriteRepository.FindAll(LineUserID)
+func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
+	PlaceIDs := interactor.favoriteRepository.FindAll(in.LineUserID)
 
-	return favoritedto.FavoriteGetOutput{PlaceIDs: PlaceIDs}
+	// IF化
+	placeDetails, placePhotoURLs := googlemap.GetPlaceDetailsAndPhotoURLs(in.Gmc, PlaceIDs, true)
+
+	out := favoritedto.GetOutput{
+		Bot:            in.Bot,
+		ReplyToken:     in.ReplyToken,
+		PlaceDetails:   placeDetails,
+		PlacePhotoURLs: placePhotoURLs,
+	}
+	presenter.Get(out)
 }

@@ -2,8 +2,8 @@ package favoritedto
 
 import "github.com/line/line-bot-sdk-go/linebot"
 
-// FavoriteAddOutput DTO
-type FavoriteAddOutput struct {
+// AddOutput DTO
+type AddOutput struct {
 	Bot            *linebot.Client
 	ReplyToken     string
 	IsSuccess      bool

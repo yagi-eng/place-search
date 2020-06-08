@@ -38,27 +38,30 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					gm := c.Get("gmc").(*maps.Client)
+					gmc := c.Get("gmc").(*maps.Client)
 					msg := message.Text
 					if msg == "お気に入り" {
-						linebots.GetFavoritePlaces(controller.favoriteInteractor, gm, bot, event)
+						favoriteGetInput := favoritedto.GetInput{
+							Gmc:        gmc,
+							Bot:        bot,
+							ReplyToken: event.ReplyToken,
+							LineUserID: event.Source.UserID,
+						}
+						controller.favoriteInteractor.Get(favoriteGetInput)
 					} else {
-						linebots.GetPlaceDetails(gm, bot, event, msg)
+						linebots.GetPlaceDetails(gmc, bot, event, msg)
 					}
 				}
 			} else if event.Type == linebot.EventTypePostback {
 				dataMap := createDataMap(event.Postback.Data)
 
 				if dataMap["action"] == "favorite" {
-					lineUserID := event.Source.UserID
-					placeID := dataMap["placeId"]
-					favoriteAddInput := favoritedto.FavoriteAddInput{
+					favoriteAddInput := favoritedto.AddInput{
 						Bot:        bot,
 						ReplyToken: event.ReplyToken,
-						LineUserID: lineUserID,
-						PlaceID:    placeID,
+						LineUserID: event.Source.UserID,
+						PlaceID:    dataMap["placeId"],
 					}
-
 					controller.favoriteInteractor.Add(favoriteAddInput)
 				}
 			}
