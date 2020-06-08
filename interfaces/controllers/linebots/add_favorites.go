@@ -14,7 +14,7 @@ const msgAlreadyAdd = "既に追加済みです！"
 const msgAdd = "お気に入りに追加しました！"
 
 // AddFavorites お気に入りリストに追加する
-func AddFavorites(UserInteractor usecase.IUserUseCase, FavoriteInteractor usecase.IFavoriteUseCase,
+func AddFavorites(userInteractor usecase.IUserUseCase, favoriteInteractor usecase.IFavoriteUseCase,
 	bot *linebot.Client, event *linebot.Event, placeID string) {
 
 	lineUserID := event.Source.UserID
@@ -22,7 +22,7 @@ func AddFavorites(UserInteractor usecase.IUserUseCase, FavoriteInteractor usecas
 		LineUserID: lineUserID,
 	}
 
-	userCreateOutput := UserInteractor.Create(userCreateInput)
+	userCreateOutput := userInteractor.Create(userCreateInput)
 	userID := userCreateOutput.UserID
 
 	if userID == 0 {
@@ -35,7 +35,7 @@ func AddFavorites(UserInteractor usecase.IUserUseCase, FavoriteInteractor usecas
 		PlaceID: placeID,
 	}
 
-	favoriteAddOutput := FavoriteInteractor.Add(favoriteAddInput)
+	favoriteAddOutput := favoriteInteractor.Add(favoriteAddInput)
 	isAlreadyAdded := favoriteAddOutput.IsAlreadyAdded
 
 	if isAlreadyAdded {
