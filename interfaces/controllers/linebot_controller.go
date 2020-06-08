@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"os"
 	"strings"
 	"virtual-travel/usecases/dto/favoritedto"
 	"virtual-travel/usecases/interactor/usecase"
@@ -13,21 +14,29 @@ import (
 // LinebotController LINEBOTコントローラ
 type LinebotController struct {
 	favoriteInteractor usecase.IFavoriteUseCase
+	bot                *linebot.Client
 }
 
 // NewLinebotController コンストラクタ
 func NewLinebotController(favoriteInteractor usecase.IFavoriteUseCase) *LinebotController {
+	secret := os.Getenv("LBOT_SECRET")
+	token := os.Getenv("LBOT_TOKEN")
+
+	bot, err := linebot.New(secret, token)
+	if err != nil {
+		logrus.Fatalf("Error creating LINEBOT client: %v", err)
+	}
+
 	return &LinebotController{
 		favoriteInteractor: favoriteInteractor,
+		bot:                bot,
 	}
 }
 
 // CatchEvents LINEBOTに関する処理
 func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		bot := c.Get("lbc").(*linebot.Client)
-
-		events, err := bot.ParseRequest(c.Request())
+		events, err := controller.bot.ParseRequest(c.Request())
 		if err != nil {
 			logrus.Fatalf("Error LINEBOT parsing request: %v", err)
 		}
@@ -39,7 +48,7 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 					msg := message.Text
 					if msg == "お気に入り" {
 						favoriteGetInput := favoritedto.GetInput{
-							Bot:        bot,
+							Bot:        controller.bot,
 							ReplyToken: event.ReplyToken,
 							LineUserID: event.Source.UserID,
 						}
@@ -53,7 +62,7 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 
 				if dataMap["action"] == "favorite" {
 					favoriteAddInput := favoritedto.AddInput{
-						Bot:        bot,
+						Bot:        controller.bot,
 						ReplyToken: event.ReplyToken,
 						LineUserID: event.Source.UserID,
 						PlaceID:    dataMap["placeId"],

@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"virtual-travel/infrastructure/database"
-	"virtual-travel/infrastructure/middlewares"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
@@ -29,7 +28,6 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.CORS())
-	e.Use(middlewares.LineBotClient())
 
 	// DB Connect
 	db, _ := database.Connect()
