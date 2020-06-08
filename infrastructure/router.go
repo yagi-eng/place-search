@@ -3,25 +3,18 @@ package infrastructure
 import (
 	"virtual-travel/interfaces/controllers"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
 // Router ルーティング
 type Router struct {
 	e *echo.Echo
-	// TODO いらない？
-	db *gorm.DB
-	c  *controllers.LinebotController
+	c *controllers.LinebotController
 }
 
 // NewRouter コンストラクタ
-func NewRouter(e *echo.Echo, db *gorm.DB, c *controllers.LinebotController) *Router {
-	return &Router{
-		e:  e,
-		db: db,
-		c:  c,
-	}
+func NewRouter(e *echo.Echo, c *controllers.LinebotController) *Router {
+	return &Router{e: e, c: c}
 }
 
 // Init ルーティング設定

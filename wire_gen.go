@@ -28,7 +28,7 @@ func Initialize(e *echo.Echo, db *gorm.DB, gmc *maps.Client) *infrastructure.Rou
 	googleMapGateway := gateway.NewGoogleMapGateway(gmc)
 	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway)
 	linebotController := controllers.NewLinebotController(favoriteInteractor)
-	router := infrastructure.NewRouter(e, db, linebotController)
+	router := infrastructure.NewRouter(e, linebotController)
 	return router
 }
 
