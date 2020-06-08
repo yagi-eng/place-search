@@ -1,6 +1,7 @@
 package presenter
 
 import (
+	"os"
 	"unicode/utf8"
 	"virtual-travel/usecases/dto/favoritedto"
 
@@ -15,28 +16,44 @@ const msgNoRegist = "お気に入り登録されていません"
 
 const maxTextWC = 60
 
+// FavoritePresenter お気に入りプレゼンタ
+type FavoritePresenter struct {
+	bot *linebot.Client
+}
+
+// NewFavoritePresenter コンストラクタ
+func NewFavoritePresenter() *FavoritePresenter {
+	secret := os.Getenv("LBOT_SECRET")
+	token := os.Getenv("LBOT_TOKEN")
+
+	bot, err := linebot.New(secret, token)
+	if err != nil {
+		logrus.Fatalf("Error creating LINEBOT client: %v", err)
+	}
+
+	return &FavoritePresenter{bot: bot}
+}
+
 // Add お気に入り追加結果を送信する
-func Add(out favoritedto.AddOutput) {
-	bot := out.Bot
+func (presenter *FavoritePresenter) Add(out favoritedto.AddOutput) {
 	replyToken := out.ReplyToken
 
 	if !out.IsSuccess {
-		replyMessage(bot, msgFail, replyToken)
+		presenter.replyMessage(msgFail, replyToken)
 	} else if out.IsAlreadyAdded {
-		replyMessage(bot, msgAlreadyAdd, replyToken)
+		presenter.replyMessage(msgAlreadyAdd, replyToken)
 	} else {
-		replyMessage(bot, msgSuccess, replyToken)
+		presenter.replyMessage(msgSuccess, replyToken)
 	}
 }
 
 // Get お気に入り一覧を送信する
-func Get(out favoritedto.GetOutput) {
-	bot := out.Bot
+func (presenter *FavoritePresenter) Get(out favoritedto.GetOutput) {
 	replyToken := out.ReplyToken
 	placeDetails := out.PlaceDetails
 
 	if len(placeDetails) == 0 {
-		replyMessage(bot, msgSuccess, replyToken)
+		presenter.replyMessage(msgSuccess, replyToken)
 		return
 	}
 
@@ -62,14 +79,14 @@ func Get(out favoritedto.GetOutput) {
 		linebot.NewCarouselTemplate(ccs...).WithImageOptions("rectangle", "cover"),
 	)
 
-	if _, err := bot.ReplyMessage(replyToken, res).Do(); err != nil {
+	if _, err := presenter.bot.ReplyMessage(replyToken, res).Do(); err != nil {
 		logrus.Fatalf("Error LINEBOT replying message: %v", err)
 	}
 }
 
-func replyMessage(bot *linebot.Client, msg string, replyToken string) {
+func (presenter *FavoritePresenter) replyMessage(msg string, replyToken string) {
 	res := linebot.NewTextMessage(msg)
-	if _, err := bot.ReplyMessage(replyToken, res).Do(); err != nil {
+	if _, err := presenter.bot.ReplyMessage(replyToken, res).Do(); err != nil {
 		logrus.Fatalf("Error LINEBOT replying message: %v", err)
 	}
 }

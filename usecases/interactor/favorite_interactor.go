@@ -2,9 +2,9 @@ package interactor
 
 import (
 	"virtual-travel/domain/repository"
-	"virtual-travel/interfaces/presenter"
 	"virtual-travel/usecases/dto/favoritedto"
 	"virtual-travel/usecases/igateway"
+	"virtual-travel/usecases/ipresenter"
 )
 
 // FavoriteInteractor お気に入りインタラクタ
@@ -12,18 +12,21 @@ type FavoriteInteractor struct {
 	userRepository     repository.IUserRepository
 	favoriteRepository repository.IFavoriteRepository
 	googleMapGateway   igateway.IGoogleMapGateway
+	favoritePresenter  ipresenter.IFavoritePresenter
 }
 
 // NewFavoriteInteractor コンストラクタ
 func NewFavoriteInteractor(
 	userRepository repository.IUserRepository,
 	favoriteRepository repository.IFavoriteRepository,
-	googleMapGateway igateway.IGoogleMapGateway) *FavoriteInteractor {
+	googleMapGateway igateway.IGoogleMapGateway,
+	favoritePresenter ipresenter.IFavoritePresenter) *FavoriteInteractor {
 
 	return &FavoriteInteractor{
 		userRepository:     userRepository,
 		favoriteRepository: favoriteRepository,
 		googleMapGateway:   googleMapGateway,
+		favoritePresenter:  favoritePresenter,
 	}
 }
 
@@ -44,7 +47,7 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 		IsSuccess:      isSuccess,
 		IsAlreadyAdded: isAlreadyAdded,
 	}
-	presenter.Add(out)
+	interactor.favoritePresenter.Add(out)
 }
 
 // Get お気に入り全件を取得する
@@ -59,5 +62,5 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 		PlaceDetails:   placeDetails,
 		PlacePhotoURLs: placePhotoURLs,
 	}
-	presenter.Get(out)
+	interactor.favoritePresenter.Get(out)
 }

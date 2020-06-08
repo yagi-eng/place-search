@@ -14,9 +14,11 @@ import (
 	"virtual-travel/infrastructure/database"
 	"virtual-travel/interfaces/controllers"
 	"virtual-travel/interfaces/gateway"
+	"virtual-travel/interfaces/presenter"
 	"virtual-travel/usecases/igateway"
 	"virtual-travel/usecases/interactor"
 	"virtual-travel/usecases/interactor/usecase"
+	"virtual-travel/usecases/ipresenter"
 )
 
 // Injectors from wire.go:
@@ -25,7 +27,8 @@ func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 	userRepository := database.NewUserRepository(db)
 	favoriteRepository := database.NewFavoriteRepository(db)
 	googleMapGateway := gateway.NewGoogleMapGateway()
-	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway)
+	favoritePresenter := presenter.NewFavoritePresenter()
+	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway, favoritePresenter)
 	linebotController := controllers.NewLinebotController(favoriteInteractor)
 	router := infrastructure.NewRouter(e, linebotController)
 	return router
@@ -33,4 +36,4 @@ func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 
 // wire.go:
 
-var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)
+var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), presenter.NewFavoritePresenter, wire.Bind(new(ipresenter.IFavoritePresenter), new(*presenter.FavoritePresenter)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)

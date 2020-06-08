@@ -8,9 +8,11 @@ import (
 	"virtual-travel/infrastructure/database"
 	"virtual-travel/interfaces/controllers"
 	"virtual-travel/interfaces/gateway"
+	"virtual-travel/interfaces/presenter"
 	"virtual-travel/usecases/igateway"
 	"virtual-travel/usecases/interactor"
 	"virtual-travel/usecases/interactor/usecase"
+	"virtual-travel/usecases/ipresenter"
 
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
@@ -25,6 +27,9 @@ var superSet = wire.NewSet(
 
 	gateway.NewGoogleMapGateway,
 	wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)),
+
+	presenter.NewFavoritePresenter,
+	wire.Bind(new(ipresenter.IFavoritePresenter), new(*presenter.FavoritePresenter)),
 
 	interactor.NewFavoriteInteractor,
 	wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)),
