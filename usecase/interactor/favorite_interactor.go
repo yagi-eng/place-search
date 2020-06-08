@@ -51,7 +51,6 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 	PlaceIDs := interactor.favoriteRepository.FindAll(in.LineUserID)
 
-	// IF化
 	placeDetails, placePhotoURLs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLs(PlaceIDs, true)
 
 	out := favoritedto.GetOutput{
