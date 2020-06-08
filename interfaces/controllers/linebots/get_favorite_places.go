@@ -21,6 +21,7 @@ func GetFavoritePlaces(favoriteInteractor usecase.IFavoriteUseCase, gm *maps.Cli
 	favoriteGetOutput := favoriteInteractor.Get(favoriteGetInput)
 	PlaceIDs := favoriteGetOutput.PlaceIDs
 
+	// googleGetDetailsOutput
 	placeDetails, placePhotoURLs := googlemap.GetPlaceDetailsAndPhotoURLs(gm, PlaceIDs, true)
 
 	if len(placeDetails) == 0 {

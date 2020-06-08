@@ -2,32 +2,48 @@ package interactor
 
 import (
 	"virtual-travel/domain/repository"
+	"virtual-travel/interfaces/presenter"
 	"virtual-travel/usecase/dto/favoritedto"
 )
 
 // FavoriteInteractor お気に入りインタラクタ
 type FavoriteInteractor struct {
-	repository repository.IFavoriteRepository
+	userRepository     repository.IUserRepository
+	favoriteRepository repository.IFavoriteRepository
 }
 
 // NewFavoriteInteractor コンストラクタ
-func NewFavoriteInteractor(repository repository.IFavoriteRepository) *FavoriteInteractor {
-	return &FavoriteInteractor{repository: repository}
+func NewFavoriteInteractor(
+	userRepository repository.IUserRepository,
+	favoriteRepository repository.IFavoriteRepository) *FavoriteInteractor {
+
+	return &FavoriteInteractor{userRepository: userRepository, favoriteRepository: favoriteRepository}
 }
 
 // Add お気に入りを追加する
-func (interactor *FavoriteInteractor) Add(in favoritedto.FavoriteAddInput) favoritedto.FavoriteAddOutput {
-	UserID := in.UserID
-	PlaceID := in.PlaceID
-	isAlreadyAdded := interactor.repository.Save(UserID, PlaceID)
+func (interactor *FavoriteInteractor) Add(in favoritedto.FavoriteAddInput) {
+	userID := interactor.userRepository.Save(in.LineUserID)
 
-	return favoritedto.FavoriteAddOutput{IsAlreadyAdded: isAlreadyAdded}
+	isSuccess := true
+	if userID == 0 {
+		isSuccess = false
+	}
+
+	isAlreadyAdded := interactor.favoriteRepository.Save(userID, in.PlaceID)
+
+	out := favoritedto.FavoriteAddOutput{
+		Bot:            in.Bot,
+		ReplyToken:     in.ReplyToken,
+		IsSuccess:      isSuccess,
+		IsAlreadyAdded: isAlreadyAdded,
+	}
+	presenter.Add(out)
 }
 
 // Get お気に入り全件を取得する
 func (interactor *FavoriteInteractor) Get(in favoritedto.FavoriteGetInput) favoritedto.FavoriteGetOutput {
 	LineUserID := in.LineUserID
-	PlaceIDs := interactor.repository.FindAll(LineUserID)
+	PlaceIDs := interactor.favoriteRepository.FindAll(LineUserID)
 
 	return favoritedto.FavoriteGetOutput{PlaceIDs: PlaceIDs}
 }

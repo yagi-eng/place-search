@@ -21,14 +21,13 @@ import (
 
 func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 	userRepository := database.NewUserRepository(db)
-	userInteractor := interactor.NewUserInteractor(userRepository)
 	favoriteRepository := database.NewFavoriteRepository(db)
-	favoriteInteractor := interactor.NewFavoriteInteractor(favoriteRepository)
-	linebotController := controllers.NewLinebotController(userInteractor, favoriteInteractor)
+	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository)
+	linebotController := controllers.NewLinebotController(favoriteInteractor)
 	router := infrastructure.NewRouter(e, db, linebotController)
 	return router
 }
 
 // wire.go:
 
-var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), interactor.NewUserInteractor, wire.Bind(new(usecase.IUserUseCase), new(*interactor.UserInteractor)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)
+var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)

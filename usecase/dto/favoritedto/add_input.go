@@ -1,7 +1,11 @@
 package favoritedto
 
+import "github.com/line/line-bot-sdk-go/linebot"
+
 // FavoriteAddInput DTO
 type FavoriteAddInput struct {
-	UserID  uint
-	PlaceID string
+	Bot        *linebot.Client
+	ReplyToken string
+	LineUserID string
+	PlaceID    string
 }

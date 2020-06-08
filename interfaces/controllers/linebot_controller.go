@@ -4,6 +4,7 @@ import (
 	"strings"
 	"virtual-travel/interfaces/controllers/linebots"
 	"virtual-travel/usecase"
+	"virtual-travel/usecase/dto/favoritedto"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -13,15 +14,13 @@ import (
 
 // LinebotController LINEBOTコントローラ
 type LinebotController struct {
-	userinteractor     usecase.IUserUseCase
-	favoriteinteractor usecase.IFavoriteUseCase
+	favoriteInteractor usecase.IFavoriteUseCase
 }
 
 // NewLinebotController コンストラクタ
-func NewLinebotController(userinteractor usecase.IUserUseCase, favoriteinteractor usecase.IFavoriteUseCase) *LinebotController {
+func NewLinebotController(favoriteInteractor usecase.IFavoriteUseCase) *LinebotController {
 	return &LinebotController{
-		userinteractor:     userinteractor,
-		favoriteinteractor: favoriteinteractor,
+		favoriteInteractor: favoriteInteractor,
 	}
 }
 
@@ -42,7 +41,7 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 					gm := c.Get("gmc").(*maps.Client)
 					msg := message.Text
 					if msg == "お気に入り" {
-						linebots.GetFavoritePlaces(controller.favoriteinteractor, gm, bot, event)
+						linebots.GetFavoritePlaces(controller.favoriteInteractor, gm, bot, event)
 					} else {
 						linebots.GetPlaceDetails(gm, bot, event, msg)
 					}
@@ -51,8 +50,16 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 				dataMap := createDataMap(event.Postback.Data)
 
 				if dataMap["action"] == "favorite" {
+					lineUserID := event.Source.UserID
 					placeID := dataMap["placeId"]
-					linebots.AddFavorites(controller.userinteractor, controller.favoriteinteractor, bot, event, placeID)
+					favoriteAddInput := favoritedto.FavoriteAddInput{
+						Bot:        bot,
+						ReplyToken: event.ReplyToken,
+						LineUserID: lineUserID,
+						PlaceID:    placeID,
+					}
+
+					controller.favoriteInteractor.Add(favoriteAddInput)
 				}
 			}
 		}
