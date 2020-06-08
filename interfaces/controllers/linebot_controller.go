@@ -2,14 +2,12 @@ package controllers
 
 import (
 	"strings"
-	"virtual-travel/interfaces/controllers/linebots"
 	"virtual-travel/usecase"
 	"virtual-travel/usecase/dto/favoritedto"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"
-	"googlemaps.github.io/maps"
 )
 
 // LinebotController LINEBOTコントローラ
@@ -38,18 +36,16 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					gmc := c.Get("gmc").(*maps.Client)
 					msg := message.Text
 					if msg == "お気に入り" {
 						favoriteGetInput := favoritedto.GetInput{
-							Gmc:        gmc,
 							Bot:        bot,
 							ReplyToken: event.ReplyToken,
 							LineUserID: event.Source.UserID,
 						}
 						controller.favoriteInteractor.Get(favoriteGetInput)
 					} else {
-						linebots.GetPlaceDetails(gmc, bot, event, msg)
+						// linebots.GetPlaceDetails(gmc, bot, event, msg)
 					}
 				}
 			} else if event.Type == linebot.EventTypePostback {

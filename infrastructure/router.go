@@ -9,7 +9,8 @@ import (
 
 // Router ルーティング
 type Router struct {
-	e  *echo.Echo
+	e *echo.Echo
+	// TODO いらない？
 	db *gorm.DB
 	c  *controllers.LinebotController
 }

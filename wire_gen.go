@@ -9,20 +9,24 @@ import (
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
+	"googlemaps.github.io/maps"
 	"virtual-travel/domain/repository"
 	"virtual-travel/infrastructure"
 	"virtual-travel/infrastructure/database"
 	"virtual-travel/interfaces/controllers"
+	"virtual-travel/interfaces/gateway"
 	"virtual-travel/usecase"
+	"virtual-travel/usecase/igateway"
 	"virtual-travel/usecase/interactor"
 )
 
 // Injectors from wire.go:
 
-func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
+func Initialize(e *echo.Echo, db *gorm.DB, gmc *maps.Client) *infrastructure.Router {
 	userRepository := database.NewUserRepository(db)
 	favoriteRepository := database.NewFavoriteRepository(db)
-	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository)
+	googleMapGateway := gateway.NewGoogleMapGateway(gmc)
+	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway)
 	linebotController := controllers.NewLinebotController(favoriteInteractor)
 	router := infrastructure.NewRouter(e, db, linebotController)
 	return router
@@ -30,4 +34,4 @@ func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 
 // wire.go:
 
-var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)
+var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)
