@@ -3,20 +3,28 @@ package linebots
 import (
 	"unicode/utf8"
 	"virtual-travel/interfaces/gateway/googlemap"
+	"virtual-travel/usecase"
+	"virtual-travel/usecase/dto/favoritedto"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"
 	"googlemaps.github.io/maps"
 )
 
-const spot = " 観光地"
+// GetFavoritePlaces お気に入り登録されたプレイスを表示する
+func GetFavoritePlaces(favoriteInteractor usecase.IFavoriteUseCase, gm *maps.Client, bot *linebot.Client, event *linebot.Event) {
+	lineUserID := event.Source.UserID
+	favoriteGetInput := favoritedto.FavoriteGetInput{
+		LineUserID: lineUserID,
+	}
 
-// GetPlaceDetails プレイスの詳細情報を取得して応答する
-func GetPlaceDetails(gm *maps.Client, bot *linebot.Client, event *linebot.Event, q string) {
-	placeDetails, placePhotoURLs := googlemap.GetPlaceDetailsAndPhotoURLsFromQuery(gm, q+spot)
+	favoriteGetOutput := favoriteInteractor.Get(favoriteGetInput)
+	PlaceIDs := favoriteGetOutput.PlaceIDs
+
+	placeDetails, placePhotoURLs := googlemap.GetPlaceDetailsAndPhotoURLs(gm, PlaceIDs, true)
 
 	if len(placeDetails) == 0 {
-		res := linebot.NewTextMessage("検索結果は0件でした")
+		res := linebot.NewTextMessage("お気に入り登録されていません")
 		if _, err := bot.ReplyMessage(event.ReplyToken, res).Do(); err != nil {
 			logrus.Fatalf("Error LINEBOT replying message: %v", err)
 		}
@@ -41,7 +49,7 @@ func GetPlaceDetails(gm *maps.Client, bot *linebot.Client, event *linebot.Event,
 	}
 
 	res := linebot.NewTemplateMessage(
-		"「"+q+"」の検索結果です",
+		"お気に入り一覧を表示",
 		linebot.NewCarouselTemplate(ccs...).WithImageOptions("rectangle", "cover"),
 	)
 

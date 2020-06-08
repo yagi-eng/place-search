@@ -23,3 +23,11 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.FavoriteAddInput) favor
 
 	return favoritedto.FavoriteAddOutput{IsAlreadyAdded: isAlreadyAdded}
 }
+
+// Get お気に入り全件を取得する
+func (interactor *FavoriteInteractor) Get(in favoritedto.FavoriteGetInput) favoritedto.FavoriteGetOutput {
+	LineUserID := in.LineUserID
+	PlaceIDs := interactor.repository.FindAll(LineUserID)
+
+	return favoritedto.FavoriteGetOutput{PlaceIDs: PlaceIDs}
+}

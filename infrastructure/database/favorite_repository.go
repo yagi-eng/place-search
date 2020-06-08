@@ -29,3 +29,19 @@ func (repository *FavoriteRepository) Save(userID uint, placeID string) bool {
 
 	return true
 }
+
+// FindAll お気に入り全件取得
+func (repository *FavoriteRepository) FindAll(LineUserID string) []string {
+	user := model.User{}
+	repository.db.Table("users").Where(model.User{LineUserID: LineUserID}).First(&user)
+
+	favorites := []model.Favorite{}
+	repository.db.Model(&user).Related(&favorites)
+
+	placeIDs := []string{}
+	for _, favorite := range favorites {
+		placeIDs = append(placeIDs, favorite.PlaceID)
+	}
+
+	return placeIDs
+}

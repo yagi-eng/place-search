@@ -40,7 +40,12 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					gm := c.Get("gmc").(*maps.Client)
-					linebots.GetPlaceDetails(gm, bot, event, message.Text)
+					msg := message.Text
+					if msg == "お気に入り" {
+						linebots.GetFavoritePlaces(controller.favoriteinteractor, gm, bot, event)
+					} else {
+						linebots.GetPlaceDetails(gm, bot, event, msg)
+					}
 				}
 			} else if event.Type == linebot.EventTypePostback {
 				dataMap := createDataMap(event.Postback.Data)
