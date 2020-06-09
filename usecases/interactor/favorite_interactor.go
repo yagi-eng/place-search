@@ -34,12 +34,11 @@ func NewFavoriteInteractor(
 func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 	PlaceIDs := interactor.favoriteRepository.FindAll(in.LineUserID)
 
-	placeDetails, placePhotoURLs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLs(PlaceIDs, true)
+	googleMapOutputs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLs(PlaceIDs, true)
 
 	out := favoritedto.GetOutput{
-		ReplyToken:     in.ReplyToken,
-		PlaceDetails:   placeDetails,
-		PlacePhotoURLs: placePhotoURLs,
+		ReplyToken:       in.ReplyToken,
+		GoogleMapOutputs: googleMapOutputs,
 	}
 	interactor.linePresenter.GetFavorites(out)
 }

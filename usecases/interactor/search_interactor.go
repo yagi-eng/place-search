@@ -27,13 +27,12 @@ func NewSearchInteractor(
 
 // Hundle 検索する
 func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
-	placeDetails, placePhotoURLs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromQuery(in.Q + spot)
+	googleMapOutputs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromQuery(in.Q + spot)
 
 	out := searchdto.Output{
-		Q:              in.Q,
-		ReplyToken:     in.ReplyToken,
-		PlaceDetails:   placeDetails,
-		PlacePhotoURLs: placePhotoURLs,
+		Q:                in.Q,
+		ReplyToken:       in.ReplyToken,
+		GoogleMapOutputs: googleMapOutputs,
 	}
 	interactor.linePresenter.Search(out)
 }

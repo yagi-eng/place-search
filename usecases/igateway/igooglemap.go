@@ -1,9 +1,9 @@
 package igateway
 
-import "googlemaps.github.io/maps"
+import "virtual-travel/usecases/dto/googlemapdto"
 
 // IGoogleMapGateway GoogleMapゲートウェイ
 type IGoogleMapGateway interface {
-	GetPlaceDetailsAndPhotoURLsFromQuery(string) ([]maps.PlaceDetailsResult, []string)
-	GetPlaceDetailsAndPhotoURLs([]string, bool) ([]maps.PlaceDetailsResult, []string)
+	GetPlaceDetailsAndPhotoURLsFromQuery(string) []googlemapdto.Output
+	GetPlaceDetailsAndPhotoURLs([]string, bool) []googlemapdto.Output
 }

@@ -3,6 +3,7 @@ package gateway
 import (
 	"context"
 	"os"
+	"virtual-travel/usecases/dto/googlemapdto"
 
 	"github.com/sirupsen/logrus"
 	"googlemaps.github.io/maps"
@@ -40,7 +41,7 @@ const photoAPIURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=4
 ******/
 
 // GetPlaceDetailsAndPhotoURLsFromQuery キーワードに基づき、プレイスの詳細情報を取得する
-func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromQuery(q string) ([]maps.PlaceDetailsResult, []string) {
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromQuery(q string) []googlemapdto.Output {
 	places := gateway.searchPlaces(q)
 	placeIDs := gateway.getPlaceIDs(places.Results)
 
@@ -48,9 +49,8 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromQuery(q string) 
 }
 
 // GetPlaceDetailsAndPhotoURLs placeIDsに基づき、プレイスの詳細情報を取得する
-func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLs(placeIDs []string, isFavorite bool) ([]maps.PlaceDetailsResult, []string) {
-	placeDetails := []maps.PlaceDetailsResult{}
-	placePhotoURLs := []string{}
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLs(placeIDs []string, isFavorite bool) []googlemapdto.Output {
+	googleMapOutputs := []googlemapdto.Output{}
 
 	maxDetails := maxDetailsOfSearch
 	if isFavorite {
@@ -63,13 +63,20 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLs(placeIDs []string, 
 		}
 
 		placeDetail := gateway.getPlaceDetail(placeID)
-		placeDetails = append(placeDetails, placeDetail)
-
 		placePhotoURL := gateway.getPlacePhotoURL(placeDetail.Photos[0].PhotoReference)
-		placePhotoURLs = append(placePhotoURLs, placePhotoURL)
+
+		googleMapOutput := googlemapdto.Output{
+			Name:     placeDetail.Name,
+			PlaceID:  placeDetail.PlaceID,
+			Address:  placeDetail.FormattedAddress,
+			URL:      placeDetail.URL,
+			PhotoURL: placePhotoURL,
+		}
+
+		googleMapOutputs = append(googleMapOutputs, googleMapOutput)
 	}
 
-	return placeDetails, placePhotoURLs
+	return googleMapOutputs
 }
 
 // getPlaceIDs プレイスの検索結果からplaceIDを取得する

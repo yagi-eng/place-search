@@ -1,12 +1,9 @@
 package favoritedto
 
-import (
-	"googlemaps.github.io/maps"
-)
+import "virtual-travel/usecases/dto/googlemapdto"
 
 // GetOutput DTO
 type GetOutput struct {
-	ReplyToken     string
-	PlaceDetails   []maps.PlaceDetailsResult
-	PlacePhotoURLs []string
+	ReplyToken       string
+	GoogleMapOutputs []googlemapdto.Output
 }

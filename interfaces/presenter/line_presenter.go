@@ -5,11 +5,11 @@ import (
 	"os"
 	"unicode/utf8"
 	"virtual-travel/usecases/dto/favoritedto"
+	"virtual-travel/usecases/dto/googlemapdto"
 	"virtual-travel/usecases/dto/searchdto"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"
-	"googlemaps.github.io/maps"
 )
 
 // AddFavoriteで使用
@@ -82,7 +82,7 @@ func (presenter *LinePresenter) GetFavorites(out favoritedto.GetOutput) {
 		postbackActionLabel: msgPostbackActionLabelGF,
 		postbackActionData:  msgPostbackActionDataGF,
 	}
-	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)
+	presenter.replyCarouselColumn(msgs, out.GoogleMapOutputs, out.ReplyToken)
 }
 
 // RemoveFavorite お気に入り削除結果を送信する
@@ -106,30 +106,30 @@ func (presenter *LinePresenter) Search(out searchdto.Output) {
 		postbackActionLabel: msgPostbackActionLabelS,
 		postbackActionData:  msgPostbackActionDataS,
 	}
-	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)
+	presenter.replyCarouselColumn(msgs, out.GoogleMapOutputs, out.ReplyToken)
 }
 
-func (presenter *LinePresenter) replyCarouselColumn(msgs carouselMsgs,
-	placeDetails []maps.PlaceDetailsResult, placePhotoURLs []string, replyToken string) {
+func (presenter *LinePresenter) replyCarouselColumn(
+	msgs carouselMsgs, googleMapOutputs []googlemapdto.Output, replyToken string) {
 
-	if len(placeDetails) == 0 {
+	if len(googleMapOutputs) == 0 {
 		presenter.replyMessage(msgs.noResult, replyToken)
 		return
 	}
 
 	ccs := []*linebot.CarouselColumn{}
-	for i, pd := range placeDetails {
-		formattedAddress := pd.FormattedAddress
-		if maxTextWC < utf8.RuneCountInString(pd.FormattedAddress) {
-			formattedAddress = string([]rune(pd.FormattedAddress)[:maxTextWC])
+	for _, gmo := range googleMapOutputs {
+		addr := gmo.Address
+		if maxTextWC < utf8.RuneCountInString(addr) {
+			addr = string([]rune(addr)[:maxTextWC])
 		}
 
-		data := fmt.Sprintf(msgs.postbackActionData, pd.PlaceID)
+		data := fmt.Sprintf(msgs.postbackActionData, gmo.PlaceID)
 		cc := linebot.NewCarouselColumn(
-			placePhotoURLs[i],
-			pd.Name,
-			formattedAddress,
-			linebot.NewURIAction("Open Google Map", pd.URL),
+			gmo.PhotoURL,
+			gmo.Name,
+			addr,
+			linebot.NewURIAction("Open Google Map", gmo.URL),
 			linebot.NewPostbackAction(msgs.postbackActionLabel, data, "", ""),
 		).WithImageOptions("#FFFFFF")
 		ccs = append(ccs, cc)
