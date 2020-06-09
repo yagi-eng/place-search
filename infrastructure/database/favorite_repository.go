@@ -16,7 +16,7 @@ func NewFavoriteRepository(db *gorm.DB) *FavoriteRepository {
 	return &FavoriteRepository{db: db}
 }
 
-// Save お気に入り追加
+// Save お気に入りを追加する
 func (repository *FavoriteRepository) Save(userID uint, placeID string) bool {
 	favorite := model.Favorite{}
 	if repository.db.Table("favorites").
@@ -30,7 +30,7 @@ func (repository *FavoriteRepository) Save(userID uint, placeID string) bool {
 	return true
 }
 
-// FindAll お気に入り全件取得
+// FindAll お気に入りを全件取得する
 func (repository *FavoriteRepository) FindAll(LineUserID string) []string {
 	user := model.User{}
 	repository.db.Table("users").Where(model.User{LineUserID: LineUserID}).First(&user)

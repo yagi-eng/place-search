@@ -20,24 +20,30 @@ import (
 )
 
 var superSet = wire.NewSet(
+	// Database
 	database.NewFavoriteRepository,
 	wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)),
 	database.NewUserRepository,
 	wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)),
 
+	// Gateway
 	gateway.NewGoogleMapGateway,
 	wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)),
 
+	// Presenter
 	presenter.NewLinePresenter,
 	wire.Bind(new(ipresenter.ILinePresenter), new(*presenter.LinePresenter)),
 
+	// Interactor
 	interactor.NewFavoriteInteractor,
 	wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)),
 	interactor.NewSearchInteractor,
 	wire.Bind(new(usecase.ISearchUseCase), new(*interactor.SearchInteractor)),
 
+	// Controller
 	controllers.NewLinebotController,
 
+	// Router
 	infrastructure.NewRouter,
 )
 

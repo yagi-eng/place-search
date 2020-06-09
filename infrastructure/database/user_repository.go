@@ -16,7 +16,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-// Save 登録
+// Save ユーザを登録する
 func (repository *UserRepository) Save(LineUserID string) uint {
 	user := model.User{}
 	if repository.db.Table("users").

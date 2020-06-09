@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"virtual-travel/infrastructure/database"
+	"virtual-travel/infrastructure"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
@@ -30,7 +30,7 @@ func main() {
 	e.Use(middleware.CORS())
 
 	// DB Connect
-	db, _ := database.Connect()
+	db, _ := infrastructure.Connect()
 	defer db.Close()
 	// output sql query
 	db.LogMode(true)

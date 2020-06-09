@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"virtual-travel/domain/model"
-	"virtual-travel/infrastructure/database"
+	"virtual-travel/infrastructure"
 
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -17,7 +17,7 @@ func main() {
 		}
 	}
 
-	db, err := database.Connect()
+	db, err := infrastructure.Connect()
 	defer db.Close()
 
 	if err != nil {

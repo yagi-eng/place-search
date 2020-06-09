@@ -47,7 +47,7 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromQuery(q string) 
 	return gateway.GetPlaceDetailsAndPhotoURLs(placeIDs, false)
 }
 
-// GetPlaceDetailsAndPhotoURLs キーワードに基づき、プレイスの詳細情報を取得する
+// GetPlaceDetailsAndPhotoURLs placeIDsに基づき、プレイスの詳細情報を取得する
 func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLs(placeIDs []string, isFavorite bool) ([]maps.PlaceDetailsResult, []string) {
 	placeDetails := []maps.PlaceDetailsResult{}
 	placePhotoURLs := []string{}
@@ -88,7 +88,6 @@ func (gateway *GoogleMapGateway) getPlaceIDs(places []maps.PlacesSearchResult) [
 ******/
 
 // searchPlaces キーワードに基づき、プレイスを検索する
-// 単独での使用を想定して第一引数には *maps.Client を渡す
 func (gateway *GoogleMapGateway) searchPlaces(q string) maps.PlacesSearchResponse {
 	r := &maps.TextSearchRequest{
 		Query:    q,
@@ -105,7 +104,6 @@ func (gateway *GoogleMapGateway) searchPlaces(q string) maps.PlacesSearchRespons
 }
 
 // getPlaceDetail プレイスの詳細情報を取得する
-// 単独での使用を想定して第一引数には *maps.Client を渡す
 func (gateway *GoogleMapGateway) getPlaceDetail(placeID string) maps.PlaceDetailsResult {
 	r := &maps.PlaceDetailsRequest{
 		PlaceID:  placeID,

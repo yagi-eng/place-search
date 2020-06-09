@@ -84,6 +84,10 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 	}
 }
 
+// createDataMap Postbackで受け取ったデータをパースしてマップ形式で保存する
+// e.g.
+// input : "action=favorite&placeId=xxxxxx"
+// output: dataMap["action"] = "favorite", dataMap["placeId"] = "xxxxx"
 func createDataMap(q string) map[string]string {
 	dataMap := make(map[string]string)
 

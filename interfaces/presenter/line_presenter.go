@@ -17,13 +17,11 @@ const msgAlreadyAdd = "既に追加済みです！"
 const msgSuccess = "お気に入りに追加しました！"
 
 // GetFavoriteで使用
-const usecase1 = "getfavorite"
-const msgNoRegist1 = "お気に入り登録されていません"
-const msgAltText1 = "お気に入りを一覧表示しました"
+const msgNoRegistGF = "お気に入り登録されていません"
+const msgAltTextGF = "お気に入りを一覧表示しました"
 
 // Searchで使用
-const usecase2 = "search"
-const msgNoRegist2 = "検索結果は0件でした"
+const msgNoRegistS = "検索結果は0件でした"
 
 const maxTextWC = 60
 
@@ -33,7 +31,6 @@ type LinePresenter struct {
 }
 
 type carouselMsgs struct {
-	usecase  string
 	noResult string
 	altText  string
 }
@@ -67,9 +64,8 @@ func (presenter *LinePresenter) AddFavorite(out favoritedto.AddOutput) {
 // GetFavorite お気に入り一覧を送信する
 func (presenter *LinePresenter) GetFavorite(out favoritedto.GetOutput) {
 	msgs := carouselMsgs{
-		usecase:  usecase1,
-		noResult: msgNoRegist1,
-		altText:  msgAltText1,
+		noResult: msgNoRegistGF,
+		altText:  msgAltTextGF,
 	}
 	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)
 }
@@ -77,8 +73,7 @@ func (presenter *LinePresenter) GetFavorite(out favoritedto.GetOutput) {
 // Search 検索結果を送信する
 func (presenter *LinePresenter) Search(out searchdto.Output) {
 	msgs := carouselMsgs{
-		usecase:  usecase2,
-		noResult: msgNoRegist2,
+		noResult: msgNoRegistS,
 		altText:  "「" + out.Q + "」の検索結果です",
 	}
 	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)

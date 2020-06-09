@@ -37,6 +37,7 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 	isSuccess := true
 	if userID == 0 {
 		isSuccess = false
+		return
 	}
 
 	isAlreadyAdded := interactor.favoriteRepository.Save(userID, in.PlaceID)
