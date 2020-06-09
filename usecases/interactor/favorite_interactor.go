@@ -61,5 +61,5 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 		PlaceDetails:   placeDetails,
 		PlacePhotoURLs: placePhotoURLs,
 	}
-	interactor.linePresenter.GetFavorite(out)
+	interactor.linePresenter.GetFavorites(out)
 }

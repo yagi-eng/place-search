@@ -1,6 +1,7 @@
 package presenter
 
 import (
+	"fmt"
 	"os"
 	"unicode/utf8"
 	"virtual-travel/usecases/dto/favoritedto"
@@ -18,10 +19,15 @@ const msgSuccess = "お気に入りに追加しました！"
 
 // GetFavoriteで使用
 const msgNoRegistGF = "お気に入り登録されていません"
-const msgAltTextGF = "お気に入りを一覧表示しました"
+const msgAltTextGF = "お気に入り一覧の表示結果です"
+const msgPostbackActionLabelGF = "Remove"
+const msgPostbackActionDataGF = "action=removeFavorite&placeId=%s"
 
 // Searchで使用
 const msgNoRegistS = "検索結果は0件でした"
+const msgAltTextS = "「%s」の検索結果です"
+const msgPostbackActionLabelS = "Add to my favorites"
+const msgPostbackActionDataS = "action=addFavorite&placeId=%s"
 
 const maxTextWC = 60
 
@@ -31,8 +37,10 @@ type LinePresenter struct {
 }
 
 type carouselMsgs struct {
-	noResult string
-	altText  string
+	noResult            string
+	altText             string
+	postbackActionLabel string
+	postbackActionData  string
 }
 
 // NewLinePresenter コンストラクタ
@@ -61,11 +69,13 @@ func (presenter *LinePresenter) AddFavorite(out favoritedto.AddOutput) {
 	}
 }
 
-// GetFavorite お気に入り一覧を送信する
-func (presenter *LinePresenter) GetFavorite(out favoritedto.GetOutput) {
+// GetFavorites お気に入り一覧を送信する
+func (presenter *LinePresenter) GetFavorites(out favoritedto.GetOutput) {
 	msgs := carouselMsgs{
-		noResult: msgNoRegistGF,
-		altText:  msgAltTextGF,
+		noResult:            msgNoRegistGF,
+		altText:             msgAltTextGF,
+		postbackActionLabel: msgPostbackActionLabelGF,
+		postbackActionData:  msgPostbackActionDataGF,
 	}
 	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)
 }
@@ -73,8 +83,10 @@ func (presenter *LinePresenter) GetFavorite(out favoritedto.GetOutput) {
 // Search 検索結果を送信する
 func (presenter *LinePresenter) Search(out searchdto.Output) {
 	msgs := carouselMsgs{
-		noResult: msgNoRegistS,
-		altText:  "「" + out.Q + "」の検索結果です",
+		noResult:            msgNoRegistS,
+		altText:             fmt.Sprintf(msgAltTextS, out.Q),
+		postbackActionLabel: msgPostbackActionLabelS,
+		postbackActionData:  msgPostbackActionDataS,
 	}
 	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)
 }
@@ -94,12 +106,13 @@ func (presenter *LinePresenter) replyCarouselColumn(msgs carouselMsgs,
 			formattedAddress = string([]rune(pd.FormattedAddress)[:maxTextWC])
 		}
 
+		data := fmt.Sprintf(msgs.postbackActionData, pd.PlaceID)
 		cc := linebot.NewCarouselColumn(
 			placePhotoURLs[i],
 			pd.Name,
 			formattedAddress,
 			linebot.NewURIAction("Open Google Map", pd.URL),
-			linebot.NewPostbackAction("Add to my favorites", "action=favorite&placeId="+pd.PlaceID, "", ""),
+			linebot.NewPostbackAction(msgs.postbackActionLabel, data, "", ""),
 		).WithImageOptions("#FFFFFF")
 		ccs = append(ccs, cc)
 	}

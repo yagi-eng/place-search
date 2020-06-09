@@ -69,7 +69,7 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 			} else if event.Type == linebot.EventTypePostback {
 				dataMap := createDataMap(event.Postback.Data)
 
-				if dataMap["action"] == "favorite" {
+				if dataMap["action"] == "addFavorite" {
 					favoriteAddInput := favoritedto.AddInput{
 						ReplyToken: event.ReplyToken,
 						LineUserID: event.Source.UserID,

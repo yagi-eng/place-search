@@ -8,6 +8,6 @@ import (
 // ILinePresenter LINEBOTプレゼンタ
 type ILinePresenter interface {
 	AddFavorite(favoritedto.AddOutput)
-	GetFavorite(favoritedto.GetOutput)
+	GetFavorites(favoritedto.GetOutput)
 	Search(searchdto.Output)
 }
