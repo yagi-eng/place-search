@@ -49,22 +49,20 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage {
-				switch message := event.Message.(type) {
-				case *linebot.TextMessage:
-					msg := message.Text
-					if msg == "お気に入り" {
-						favoriteGetInput := favoritedto.GetInput{
-							ReplyToken: event.ReplyToken,
-							LineUserID: event.Source.UserID,
-						}
-						controller.favoriteInteractor.Get(favoriteGetInput)
-					} else {
-						searchInput := searchdto.Input{
-							ReplyToken: event.ReplyToken,
-							Q:          msg,
-						}
-						controller.searchInteractor.Hundle(searchInput)
+				msg := event.Message.(*linebot.TextMessage).Text
+
+				if msg == "お気に入り" {
+					favoriteGetInput := favoritedto.GetInput{
+						ReplyToken: event.ReplyToken,
+						LineUserID: event.Source.UserID,
 					}
+					controller.favoriteInteractor.Get(favoriteGetInput)
+				} else {
+					searchInput := searchdto.Input{
+						ReplyToken: event.ReplyToken,
+						Q:          msg,
+					}
+					controller.searchInteractor.Hundle(searchInput)
 				}
 			} else if event.Type == linebot.EventTypePostback {
 				dataMap := createDataMap(event.Postback.Data)
