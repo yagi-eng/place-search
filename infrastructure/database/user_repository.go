@@ -36,6 +36,5 @@ func (repository *UserRepository) Save(lineUserID string) uint {
 		user = model.User{LineUserID: lineUserID}
 		repository.db.Create(&user)
 	}
-
 	return user.ID
 }
