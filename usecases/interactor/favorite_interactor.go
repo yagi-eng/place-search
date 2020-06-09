@@ -48,17 +48,19 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 	userID := interactor.userRepository.Save(in.LineUserID)
 
-	isSuccess := true
+	var userExists bool
+	var isAdded bool
 	if userID == 0 {
-		isSuccess = false
-		return
+		userExists = false
+		isAdded = false
+	} else {
+		userExists = true
+		isAdded = interactor.favoriteRepository.Save(userID, in.PlaceID)
 	}
-
-	isAdded := interactor.favoriteRepository.Save(userID, in.PlaceID)
 
 	out := favoritedto.AddOutput{
 		ReplyToken:     in.ReplyToken,
-		IsSuccess:      isSuccess,
+		UserExists:     userExists,
 		IsAlreadyAdded: !isAdded,
 	}
 	interactor.linePresenter.AddFavorite(out)
@@ -68,17 +70,19 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 func (interactor *FavoriteInteractor) Remove(in favoritedto.RemoveInput) {
 	userID := interactor.userRepository.FindOne(in.LineUserID)
 
-	isSuccess := true
+	var userExists bool
+	var isRemoved bool
 	if userID == 0 {
-		isSuccess = false
-		return
+		userExists = false
+		isRemoved = false
+	} else {
+		userExists = true
+		isRemoved = interactor.favoriteRepository.Delete(userID, in.PlaceID)
 	}
-
-	isRemoved := interactor.favoriteRepository.Delete(userID, in.PlaceID)
 
 	out := favoritedto.RemoveOutput{
 		ReplyToken:       in.ReplyToken,
-		IsSuccess:        isSuccess,
+		UserExists:       userExists,
 		IsAlreadyRemoved: !isRemoved,
 	}
 	interactor.linePresenter.RemoveFavorite(out)

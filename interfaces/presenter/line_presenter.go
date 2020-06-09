@@ -17,7 +17,7 @@ const msgFailAF = "お気に入りに追加できませんでした。再度登�
 const msgAlreadyAddAF = "既に追加済みです！"
 const msgSuccessAF = "お気に入りに追加しました！"
 
-// GetFavoriteで使用
+// GetFavoritesで使用
 const msgNoRegistGF = "お気に入り登録されていません"
 const msgAltTextGF = "お気に入り一覧の表示結果です"
 const msgPostbackActionLabelGF = "Remove"
@@ -65,7 +65,7 @@ func NewLinePresenter() *LinePresenter {
 func (presenter *LinePresenter) AddFavorite(out favoritedto.AddOutput) {
 	replyToken := out.ReplyToken
 
-	if !out.IsSuccess {
+	if !out.UserExists {
 		presenter.replyMessage(msgFailAF, replyToken)
 	} else if out.IsAlreadyAdded {
 		presenter.replyMessage(msgAlreadyAddAF, replyToken)
@@ -89,7 +89,7 @@ func (presenter *LinePresenter) GetFavorites(out favoritedto.GetOutput) {
 func (presenter *LinePresenter) RemoveFavorite(out favoritedto.RemoveOutput) {
 	replyToken := out.ReplyToken
 
-	if !out.IsSuccess {
+	if !out.UserExists {
 		presenter.replyMessage(msgFailRF, replyToken)
 	} else if out.IsAlreadyRemoved {
 		presenter.replyMessage(msgAlreadyAddRF, replyToken)

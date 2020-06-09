@@ -3,6 +3,6 @@ package favoritedto
 // AddOutput DTO
 type AddOutput struct {
 	ReplyToken     string
-	IsSuccess      bool
+	UserExists     bool
 	IsAlreadyAdded bool
 }
