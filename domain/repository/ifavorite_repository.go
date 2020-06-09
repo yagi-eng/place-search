@@ -4,4 +4,5 @@ package repository
 type IFavoriteRepository interface {
 	Save(uint, string) bool
 	FindAll(string) []string
+	Delete(uint, string) bool
 }

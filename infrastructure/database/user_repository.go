@@ -16,13 +16,24 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-// Save ユーザを登録する
-func (repository *UserRepository) Save(LineUserID string) uint {
+// FindOne ユーザを検索する
+func (repository *UserRepository) FindOne(lineUserID string) uint {
 	user := model.User{}
 	if repository.db.Table("users").
-		Where(model.User{LineUserID: LineUserID}).First(&user).RecordNotFound() {
+		Where(model.User{LineUserID: lineUserID}).First(&user).RecordNotFound() {
 
-		user = model.User{LineUserID: LineUserID}
+		return 0
+	}
+	return user.ID
+}
+
+// Save ユーザを登録する
+func (repository *UserRepository) Save(lineUserID string) uint {
+	user := model.User{}
+	if repository.db.Table("users").
+		Where(model.User{LineUserID: lineUserID}).First(&user).RecordNotFound() {
+
+		user = model.User{LineUserID: lineUserID}
 		repository.db.Create(&user)
 	}
 

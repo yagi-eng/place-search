@@ -63,3 +63,23 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 	}
 	interactor.linePresenter.GetFavorites(out)
 }
+
+// Remove お気に入りを削除する
+func (interactor *FavoriteInteractor) Remove(in favoritedto.RemoveInput) {
+	userID := interactor.userRepository.FindOne(in.LineUserID)
+
+	isSuccess := true
+	if userID == 0 {
+		isSuccess = false
+		return
+	}
+
+	isAlreadyRemoved := interactor.favoriteRepository.Delete(userID, in.PlaceID)
+
+	out := favoritedto.RemoveOutput{
+		ReplyToken:       in.ReplyToken,
+		IsSuccess:        isSuccess,
+		IsAlreadyRemoved: isAlreadyRemoved,
+	}
+	interactor.linePresenter.RemoveFavorite(out)
+}

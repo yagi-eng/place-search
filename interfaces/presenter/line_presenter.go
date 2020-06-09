@@ -13,15 +13,20 @@ import (
 )
 
 // AddFavoriteで使用
-const msgFail = "お気に入りに追加できませんでした。再度登録をお願いしますm(__)m"
-const msgAlreadyAdd = "既に追加済みです！"
-const msgSuccess = "お気に入りに追加しました！"
+const msgFailAF = "お気に入りに追加できませんでした。再度登録をお願いしますm(__)m"
+const msgAlreadyAddAF = "既に追加済みです！"
+const msgSuccessAF = "お気に入りに追加しました！"
 
 // GetFavoriteで使用
 const msgNoRegistGF = "お気に入り登録されていません"
 const msgAltTextGF = "お気に入り一覧の表示結果です"
 const msgPostbackActionLabelGF = "Remove"
 const msgPostbackActionDataGF = "action=removeFavorite&placeId=%s"
+
+// RemoveFavoriteで使用
+const msgFailRF = "お気に入りを削除できませんでした。再度登録をお願いしますm(__)m"
+const msgAlreadyAddRF = "既に削除済みです！"
+const msgSuccessRF = "お気に入りを削除しました！"
 
 // Searchで使用
 const msgNoRegistS = "検索結果は0件でした"
@@ -61,11 +66,11 @@ func (presenter *LinePresenter) AddFavorite(out favoritedto.AddOutput) {
 	replyToken := out.ReplyToken
 
 	if !out.IsSuccess {
-		presenter.replyMessage(msgFail, replyToken)
+		presenter.replyMessage(msgFailAF, replyToken)
 	} else if out.IsAlreadyAdded {
-		presenter.replyMessage(msgAlreadyAdd, replyToken)
+		presenter.replyMessage(msgAlreadyAddAF, replyToken)
 	} else {
-		presenter.replyMessage(msgSuccess, replyToken)
+		presenter.replyMessage(msgSuccessAF, replyToken)
 	}
 }
 
@@ -78,6 +83,19 @@ func (presenter *LinePresenter) GetFavorites(out favoritedto.GetOutput) {
 		postbackActionData:  msgPostbackActionDataGF,
 	}
 	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)
+}
+
+// RemoveFavorite お気に入り削除結果を送信する
+func (presenter *LinePresenter) RemoveFavorite(out favoritedto.RemoveOutput) {
+	replyToken := out.ReplyToken
+
+	if !out.IsSuccess {
+		presenter.replyMessage(msgFailRF, replyToken)
+	} else if out.IsAlreadyRemoved {
+		presenter.replyMessage(msgAlreadyAddRF, replyToken)
+	} else {
+		presenter.replyMessage(msgSuccessRF, replyToken)
+	}
 }
 
 // Search 検索結果を送信する

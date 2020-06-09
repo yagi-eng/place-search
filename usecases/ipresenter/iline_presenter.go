@@ -9,5 +9,6 @@ import (
 type ILinePresenter interface {
 	AddFavorite(favoritedto.AddOutput)
 	GetFavorites(favoritedto.GetOutput)
+	RemoveFavorite(favoritedto.RemoveOutput)
 	Search(searchdto.Output)
 }

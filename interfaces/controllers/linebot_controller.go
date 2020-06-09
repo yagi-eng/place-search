@@ -76,6 +76,13 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 						PlaceID:    dataMap["placeId"],
 					}
 					controller.favoriteInteractor.Add(favoriteAddInput)
+				} else if dataMap["action"] == "removeFavorite" {
+					favoriteRemoveInput := favoritedto.RemoveInput{
+						ReplyToken: event.ReplyToken,
+						LineUserID: event.Source.UserID,
+						PlaceID:    dataMap["placeId"],
+					}
+					controller.favoriteInteractor.Remove(favoriteRemoveInput)
 				}
 			}
 		}
