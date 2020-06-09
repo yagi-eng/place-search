@@ -29,11 +29,13 @@ func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 	googleMapGateway := gateway.NewGoogleMapGateway()
 	favoritePresenter := presenter.NewFavoritePresenter()
 	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway, favoritePresenter)
-	linebotController := controllers.NewLinebotController(favoriteInteractor)
+	searchPresenter := presenter.NewSearchPresenter()
+	searchInteractor := interactor.NewSearchInteractor(googleMapGateway, searchPresenter)
+	linebotController := controllers.NewLinebotController(favoriteInteractor, searchInteractor)
 	router := infrastructure.NewRouter(e, linebotController)
 	return router
 }
 
 // wire.go:
 
-var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), presenter.NewFavoritePresenter, wire.Bind(new(ipresenter.IFavoritePresenter), new(*presenter.FavoritePresenter)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)
+var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), presenter.NewFavoritePresenter, wire.Bind(new(ipresenter.IFavoritePresenter), new(*presenter.FavoritePresenter)), presenter.NewSearchPresenter, wire.Bind(new(ipresenter.ISearchPresenter), new(*presenter.SearchPresenter)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), interactor.NewSearchInteractor, wire.Bind(new(usecase.ISearchUseCase), new(*interactor.SearchInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)

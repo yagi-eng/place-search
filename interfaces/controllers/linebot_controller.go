@@ -4,6 +4,7 @@ import (
 	"os"
 	"strings"
 	"virtual-travel/usecases/dto/favoritedto"
+	"virtual-travel/usecases/dto/searchdto"
 	"virtual-travel/usecases/interactor/usecase"
 
 	"github.com/labstack/echo"
@@ -14,11 +15,15 @@ import (
 // LinebotController LINEBOTコントローラ
 type LinebotController struct {
 	favoriteInteractor usecase.IFavoriteUseCase
+	searchInteractor   usecase.ISearchUseCase
 	bot                *linebot.Client
 }
 
 // NewLinebotController コンストラクタ
-func NewLinebotController(favoriteInteractor usecase.IFavoriteUseCase) *LinebotController {
+func NewLinebotController(
+	favoriteInteractor usecase.IFavoriteUseCase,
+	searchInteractor usecase.ISearchUseCase) *LinebotController {
+
 	secret := os.Getenv("LBOT_SECRET")
 	token := os.Getenv("LBOT_TOKEN")
 
@@ -29,6 +34,7 @@ func NewLinebotController(favoriteInteractor usecase.IFavoriteUseCase) *LinebotC
 
 	return &LinebotController{
 		favoriteInteractor: favoriteInteractor,
+		searchInteractor:   searchInteractor,
 		bot:                bot,
 	}
 }
@@ -53,7 +59,11 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 						}
 						controller.favoriteInteractor.Get(favoriteGetInput)
 					} else {
-						// linebots.GetPlaceDetails(gmc, bot, event, msg)
+						searchInput := searchdto.Input{
+							ReplyToken: event.ReplyToken,
+							Q:          msg,
+						}
+						controller.searchInteractor.Hundle(searchInput)
 					}
 				}
 			} else if event.Type == linebot.EventTypePostback {

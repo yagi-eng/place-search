@@ -30,9 +30,13 @@ var superSet = wire.NewSet(
 
 	presenter.NewFavoritePresenter,
 	wire.Bind(new(ipresenter.IFavoritePresenter), new(*presenter.FavoritePresenter)),
+	presenter.NewSearchPresenter,
+	wire.Bind(new(ipresenter.ISearchPresenter), new(*presenter.SearchPresenter)),
 
 	interactor.NewFavoriteInteractor,
 	wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)),
+	interactor.NewSearchInteractor,
+	wire.Bind(new(usecase.ISearchUseCase), new(*interactor.SearchInteractor)),
 
 	controllers.NewLinebotController,
 
