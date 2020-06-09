@@ -30,26 +30,6 @@ func NewFavoriteInteractor(
 	}
 }
 
-// Add お気に入りを追加する
-func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
-	userID := interactor.userRepository.Save(in.LineUserID)
-
-	isSuccess := true
-	if userID == 0 {
-		isSuccess = false
-		return
-	}
-
-	isAlreadyAdded := interactor.favoriteRepository.Save(userID, in.PlaceID)
-
-	out := favoritedto.AddOutput{
-		ReplyToken:     in.ReplyToken,
-		IsSuccess:      isSuccess,
-		IsAlreadyAdded: isAlreadyAdded,
-	}
-	interactor.linePresenter.AddFavorite(out)
-}
-
 // Get お気に入り全件を取得する
 func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 	PlaceIDs := interactor.favoriteRepository.FindAll(in.LineUserID)
@@ -64,6 +44,26 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 	interactor.linePresenter.GetFavorites(out)
 }
 
+// Add お気に入りを追加する
+func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
+	userID := interactor.userRepository.Save(in.LineUserID)
+
+	isSuccess := true
+	if userID == 0 {
+		isSuccess = false
+		return
+	}
+
+	isAdded := interactor.favoriteRepository.Save(userID, in.PlaceID)
+
+	out := favoritedto.AddOutput{
+		ReplyToken:     in.ReplyToken,
+		IsSuccess:      isSuccess,
+		IsAlreadyAdded: !isAdded,
+	}
+	interactor.linePresenter.AddFavorite(out)
+}
+
 // Remove お気に入りを削除する
 func (interactor *FavoriteInteractor) Remove(in favoritedto.RemoveInput) {
 	userID := interactor.userRepository.FindOne(in.LineUserID)
@@ -74,12 +74,12 @@ func (interactor *FavoriteInteractor) Remove(in favoritedto.RemoveInput) {
 		return
 	}
 
-	isAlreadyRemoved := interactor.favoriteRepository.Delete(userID, in.PlaceID)
+	isRemoved := interactor.favoriteRepository.Delete(userID, in.PlaceID)
 
 	out := favoritedto.RemoveOutput{
 		ReplyToken:       in.ReplyToken,
 		IsSuccess:        isSuccess,
-		IsAlreadyRemoved: isAlreadyRemoved,
+		IsAlreadyRemoved: !isRemoved,
 	}
 	interactor.linePresenter.RemoveFavorite(out)
 }

@@ -24,9 +24,22 @@ func (repository *FavoriteRepository) Save(userID uint, placeID string) bool {
 
 		favorite = model.Favorite{UserID: userID, PlaceID: placeID}
 		repository.db.Create(&favorite)
+		return true
+	}
+
+	return false
+}
+
+// Delete お気に入りを削除する
+func (repository *FavoriteRepository) Delete(userID uint, placeID string) bool {
+	favorite := model.Favorite{}
+	if repository.db.Table("favorites").
+		Where(model.Favorite{UserID: userID, PlaceID: placeID}).First(&favorite).RecordNotFound() {
+
 		return false
 	}
 
+	repository.db.Delete(&favorite)
 	return true
 }
 
@@ -44,17 +57,4 @@ func (repository *FavoriteRepository) FindAll(lineUserID string) []string {
 	}
 
 	return placeIDs
-}
-
-// Delete お気に入りを削除する
-func (repository *FavoriteRepository) Delete(userID uint, placeID string) bool {
-	favorite := model.Favorite{}
-	if repository.db.Table("favorites").
-		Where(model.Favorite{UserID: userID, PlaceID: placeID}).First(&favorite).RecordNotFound() {
-
-		return true
-	}
-
-	repository.db.Delete(&favorite)
-	return false
 }
