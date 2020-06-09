@@ -4,25 +4,42 @@ import (
 	"os"
 	"unicode/utf8"
 	"virtual-travel/usecases/dto/favoritedto"
+	"virtual-travel/usecases/dto/searchdto"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"
+	"googlemaps.github.io/maps"
 )
 
+// AddFavoriteで使用
 const msgFail = "お気に入りに追加できませんでした。再度登録をお願いしますm(__)m"
 const msgAlreadyAdd = "既に追加済みです！"
 const msgSuccess = "お気に入りに追加しました！"
-const msgNoRegist = "お気に入り登録されていません"
+
+// GetFavoriteで使用
+const usecase1 = "getfavorite"
+const msgNoRegist1 = "お気に入り登録されていません"
+const msgAltText1 = "お気に入りを一覧表示しました"
+
+// Searchで使用
+const usecase2 = "search"
+const msgNoRegist2 = "検索結果は0件でした"
 
 const maxTextWC = 60
 
-// FavoritePresenter お気に入りプレゼンタ
-type FavoritePresenter struct {
+// LinePresenter LINEプレゼンタ
+type LinePresenter struct {
 	bot *linebot.Client
 }
 
-// NewFavoritePresenter コンストラクタ
-func NewFavoritePresenter() *FavoritePresenter {
+type carouselMsgs struct {
+	usecase  string
+	noResult string
+	altText  string
+}
+
+// NewLinePresenter コンストラクタ
+func NewLinePresenter() *LinePresenter {
 	secret := os.Getenv("LBOT_SECRET")
 	token := os.Getenv("LBOT_TOKEN")
 
@@ -31,11 +48,11 @@ func NewFavoritePresenter() *FavoritePresenter {
 		logrus.Fatalf("Error creating LINEBOT client: %v", err)
 	}
 
-	return &FavoritePresenter{bot: bot}
+	return &LinePresenter{bot: bot}
 }
 
-// Add お気に入り追加結果を送信する
-func (presenter *FavoritePresenter) Add(out favoritedto.AddOutput) {
+// AddFavorite お気に入り追加結果を送信する
+func (presenter *LinePresenter) AddFavorite(out favoritedto.AddOutput) {
 	replyToken := out.ReplyToken
 
 	if !out.IsSuccess {
@@ -47,13 +64,31 @@ func (presenter *FavoritePresenter) Add(out favoritedto.AddOutput) {
 	}
 }
 
-// Get お気に入り一覧を送信する
-func (presenter *FavoritePresenter) Get(out favoritedto.GetOutput) {
-	replyToken := out.ReplyToken
-	placeDetails := out.PlaceDetails
+// GetFavorite お気に入り一覧を送信する
+func (presenter *LinePresenter) GetFavorite(out favoritedto.GetOutput) {
+	msgs := carouselMsgs{
+		usecase:  usecase1,
+		noResult: msgNoRegist1,
+		altText:  msgAltText1,
+	}
+	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)
+}
+
+// Search 検索結果を送信する
+func (presenter *LinePresenter) Search(out searchdto.Output) {
+	msgs := carouselMsgs{
+		usecase:  usecase2,
+		noResult: msgNoRegist2,
+		altText:  "「" + out.Q + "」の検索結果です",
+	}
+	presenter.replyCarouselColumn(msgs, out.PlaceDetails, out.PlacePhotoURLs, out.ReplyToken)
+}
+
+func (presenter *LinePresenter) replyCarouselColumn(msgs carouselMsgs,
+	placeDetails []maps.PlaceDetailsResult, placePhotoURLs []string, replyToken string) {
 
 	if len(placeDetails) == 0 {
-		presenter.replyMessage(msgSuccess, replyToken)
+		presenter.replyMessage(msgs.noResult, replyToken)
 		return
 	}
 
@@ -65,7 +100,7 @@ func (presenter *FavoritePresenter) Get(out favoritedto.GetOutput) {
 		}
 
 		cc := linebot.NewCarouselColumn(
-			out.PlacePhotoURLs[i],
+			placePhotoURLs[i],
 			pd.Name,
 			formattedAddress,
 			linebot.NewURIAction("Open Google Map", pd.URL),
@@ -75,7 +110,7 @@ func (presenter *FavoritePresenter) Get(out favoritedto.GetOutput) {
 	}
 
 	res := linebot.NewTemplateMessage(
-		"お気に入り一覧を表示",
+		msgs.altText,
 		linebot.NewCarouselTemplate(ccs...).WithImageOptions("rectangle", "cover"),
 	)
 
@@ -84,7 +119,7 @@ func (presenter *FavoritePresenter) Get(out favoritedto.GetOutput) {
 	}
 }
 
-func (presenter *FavoritePresenter) replyMessage(msg string, replyToken string) {
+func (presenter *LinePresenter) replyMessage(msg string, replyToken string) {
 	res := linebot.NewTextMessage(msg)
 	if _, err := presenter.bot.ReplyMessage(replyToken, res).Do(); err != nil {
 		logrus.Fatalf("Error LINEBOT replying message: %v", err)

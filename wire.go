@@ -28,10 +28,8 @@ var superSet = wire.NewSet(
 	gateway.NewGoogleMapGateway,
 	wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)),
 
-	presenter.NewFavoritePresenter,
-	wire.Bind(new(ipresenter.IFavoritePresenter), new(*presenter.FavoritePresenter)),
-	presenter.NewSearchPresenter,
-	wire.Bind(new(ipresenter.ISearchPresenter), new(*presenter.SearchPresenter)),
+	presenter.NewLinePresenter,
+	wire.Bind(new(ipresenter.ILinePresenter), new(*presenter.LinePresenter)),
 
 	interactor.NewFavoriteInteractor,
 	wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)),

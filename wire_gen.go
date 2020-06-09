@@ -27,10 +27,9 @@ func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 	userRepository := database.NewUserRepository(db)
 	favoriteRepository := database.NewFavoriteRepository(db)
 	googleMapGateway := gateway.NewGoogleMapGateway()
-	favoritePresenter := presenter.NewFavoritePresenter()
-	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway, favoritePresenter)
-	searchPresenter := presenter.NewSearchPresenter()
-	searchInteractor := interactor.NewSearchInteractor(googleMapGateway, searchPresenter)
+	linePresenter := presenter.NewLinePresenter()
+	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway, linePresenter)
+	searchInteractor := interactor.NewSearchInteractor(googleMapGateway, linePresenter)
 	linebotController := controllers.NewLinebotController(favoriteInteractor, searchInteractor)
 	router := infrastructure.NewRouter(e, linebotController)
 	return router
@@ -38,4 +37,4 @@ func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 
 // wire.go:
 
-var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), presenter.NewFavoritePresenter, wire.Bind(new(ipresenter.IFavoritePresenter), new(*presenter.FavoritePresenter)), presenter.NewSearchPresenter, wire.Bind(new(ipresenter.ISearchPresenter), new(*presenter.SearchPresenter)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), interactor.NewSearchInteractor, wire.Bind(new(usecase.ISearchUseCase), new(*interactor.SearchInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)
+var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), presenter.NewLinePresenter, wire.Bind(new(ipresenter.ILinePresenter), new(*presenter.LinePresenter)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), interactor.NewSearchInteractor, wire.Bind(new(usecase.ISearchUseCase), new(*interactor.SearchInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)

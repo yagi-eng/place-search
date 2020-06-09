@@ -12,7 +12,7 @@ type FavoriteInteractor struct {
 	userRepository     repository.IUserRepository
 	favoriteRepository repository.IFavoriteRepository
 	googleMapGateway   igateway.IGoogleMapGateway
-	favoritePresenter  ipresenter.IFavoritePresenter
+	linePresenter      ipresenter.ILinePresenter
 }
 
 // NewFavoriteInteractor コンストラクタ
@@ -20,13 +20,13 @@ func NewFavoriteInteractor(
 	userRepository repository.IUserRepository,
 	favoriteRepository repository.IFavoriteRepository,
 	googleMapGateway igateway.IGoogleMapGateway,
-	favoritePresenter ipresenter.IFavoritePresenter) *FavoriteInteractor {
+	linePresenter ipresenter.ILinePresenter) *FavoriteInteractor {
 
 	return &FavoriteInteractor{
 		userRepository:     userRepository,
 		favoriteRepository: favoriteRepository,
 		googleMapGateway:   googleMapGateway,
-		favoritePresenter:  favoritePresenter,
+		linePresenter:      linePresenter,
 	}
 }
 
@@ -46,7 +46,7 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 		IsSuccess:      isSuccess,
 		IsAlreadyAdded: isAlreadyAdded,
 	}
-	interactor.favoritePresenter.Add(out)
+	interactor.linePresenter.AddFavorite(out)
 }
 
 // Get お気に入り全件を取得する
@@ -60,5 +60,5 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 		PlaceDetails:   placeDetails,
 		PlacePhotoURLs: placePhotoURLs,
 	}
-	interactor.favoritePresenter.Get(out)
+	interactor.linePresenter.GetFavorite(out)
 }

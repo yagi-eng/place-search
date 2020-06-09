@@ -11,17 +11,17 @@ const spot = " 観光地"
 // SearchInteractor 検索インタラクタ
 type SearchInteractor struct {
 	googleMapGateway igateway.IGoogleMapGateway
-	searchPresenter  ipresenter.ISearchPresenter
+	linePresenter    ipresenter.ILinePresenter
 }
 
 // NewSearchInteractor コンストラクタ
 func NewSearchInteractor(
 	googleMapGateway igateway.IGoogleMapGateway,
-	searchPresenter ipresenter.ISearchPresenter) *SearchInteractor {
+	linePresenter ipresenter.ILinePresenter) *SearchInteractor {
 
 	return &SearchInteractor{
 		googleMapGateway: googleMapGateway,
-		searchPresenter:  searchPresenter,
+		linePresenter:    linePresenter,
 	}
 }
 
@@ -35,5 +35,5 @@ func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
 		PlaceDetails:   placeDetails,
 		PlacePhotoURLs: placePhotoURLs,
 	}
-	interactor.searchPresenter.Hundle(out)
+	interactor.linePresenter.Search(out)
 }
