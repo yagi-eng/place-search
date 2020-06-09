@@ -1,10 +1,10 @@
 package interactor
 
 import (
-	"virtual-travel/domain/repository"
-	"virtual-travel/usecases/dto/favoritedto"
-	"virtual-travel/usecases/igateway"
-	"virtual-travel/usecases/ipresenter"
+	"github.com/yagi-eng/virtual-travel/domain/repository"
+	"github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
+	"github.com/yagi-eng/virtual-travel/usecases/igateway"
+	"github.com/yagi-eng/virtual-travel/usecases/ipresenter"
 )
 
 // FavoriteInteractor お気に入りインタラクタ

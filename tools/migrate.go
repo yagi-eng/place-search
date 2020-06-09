@@ -2,8 +2,9 @@ package main
 
 import (
 	"os"
-	"virtual-travel/domain/model"
-	"virtual-travel/infrastructure"
+
+	"github.com/yagi-eng/virtual-travel/domain/model"
+	"github.com/yagi-eng/virtual-travel/infrastructure"
 
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"

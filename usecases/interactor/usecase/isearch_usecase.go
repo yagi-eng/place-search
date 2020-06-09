@@ -1,6 +1,6 @@
 package usecase
 
-import "virtual-travel/usecases/dto/searchdto"
+import "github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
 
 // ISearchUseCase 検索ユースケース
 type ISearchUseCase interface {

@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"os"
 	"unicode/utf8"
-	"virtual-travel/usecases/dto/favoritedto"
-	"virtual-travel/usecases/dto/googlemapdto"
-	"virtual-travel/usecases/dto/searchdto"
+
+	"github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
+	"github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
+	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"

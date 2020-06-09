@@ -1,9 +1,9 @@
 package interactor
 
 import (
-	"virtual-travel/usecases/dto/searchdto"
-	"virtual-travel/usecases/igateway"
-	"virtual-travel/usecases/ipresenter"
+	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
+	"github.com/yagi-eng/virtual-travel/usecases/igateway"
+	"github.com/yagi-eng/virtual-travel/usecases/ipresenter"
 )
 
 const spot = " 観光地"

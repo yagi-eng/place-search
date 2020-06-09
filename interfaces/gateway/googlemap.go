@@ -3,7 +3,8 @@ package gateway
 import (
 	"context"
 	"os"
-	"virtual-travel/usecases/dto/googlemapdto"
+
+	"github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
 
 	"github.com/sirupsen/logrus"
 	"googlemaps.github.io/maps"

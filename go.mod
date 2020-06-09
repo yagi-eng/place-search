@@ -1,4 +1,4 @@
-module virtual-travel
+module github.com/yagi-eng/virtual-travel
 
 go 1.14
 

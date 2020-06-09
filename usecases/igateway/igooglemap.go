@@ -1,6 +1,6 @@
 package igateway
 
-import "virtual-travel/usecases/dto/googlemapdto"
+import "github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
 
 // IGoogleMapGateway GoogleMapゲートウェイ
 type IGoogleMapGateway interface {

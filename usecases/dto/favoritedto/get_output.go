@@ -1,6 +1,6 @@
 package favoritedto
 
-import "virtual-travel/usecases/dto/googlemapdto"
+import "github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
 
 // GetOutput DTO
 type GetOutput struct {

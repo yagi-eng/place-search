@@ -3,9 +3,10 @@ package controllers
 import (
 	"os"
 	"strings"
-	"virtual-travel/usecases/dto/favoritedto"
-	"virtual-travel/usecases/dto/searchdto"
-	"virtual-travel/usecases/interactor/usecase"
+
+	"github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
+	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
+	"github.com/yagi-eng/virtual-travel/usecases/interactor/usecase"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"

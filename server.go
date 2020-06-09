@@ -2,7 +2,8 @@ package main
 
 import (
 	"os"
-	"virtual-travel/infrastructure"
+
+	"github.com/yagi-eng/virtual-travel/infrastructure"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
