@@ -31,7 +31,13 @@ func main() {
 	e.Use(middleware.CORS())
 
 	// DB Connect
-	db, _ := infrastructure.Connect()
+	db, err := infrastructure.Connect()
+	if err != nil {
+		logrus.Infof("Error connecting DB: %v", err)
+		// Heroku用 アプリの起動に合わせてDBが起動できないことがあるので再接続を試みる
+		db, _ = infrastructure.Connect()
+	}
+
 	defer db.Close()
 	// output sql query
 	db.LogMode(true)
