@@ -1,6 +1,7 @@
 package interactor
 
 import (
+	"os"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -17,12 +18,13 @@ func TestHundle1(t *testing.T) {
 	defer ctrl.Finish()
 
 	q := "東京"
+	query := os.Getenv("QUERY")
 	gmo := googlemapdto.Output{}
 	gmos := []googlemapdto.Output{gmo}
 
 	mockGoogleMapGW := mock_gateway.NewMockIGoogleMapGateway(ctrl)
 	mockGoogleMapGW.EXPECT().
-		GetPlaceDetailsAndPhotoURLsFromQuery(q + spot).
+		GetPlaceDetailsAndPhotoURLsFromQuery(q + query).
 		Return(gmos)
 
 	expected := searchdto.Output{

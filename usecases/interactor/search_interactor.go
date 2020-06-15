@@ -1,12 +1,12 @@
 package interactor
 
 import (
+	"os"
+
 	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
 	"github.com/yagi-eng/virtual-travel/usecases/igateway"
 	"github.com/yagi-eng/virtual-travel/usecases/ipresenter"
 )
-
-const spot = " 観光地"
 
 // SearchInteractor 検索インタラクタ
 type SearchInteractor struct {
@@ -27,7 +27,8 @@ func NewSearchInteractor(
 
 // Hundle 検索する
 func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
-	googleMapOutputs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromQuery(in.Q + spot)
+	query := os.Getenv("QUERY")
+	googleMapOutputs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromQuery(in.Q + " " + query)
 
 	out := searchdto.Output{
 		Q:                in.Q,
