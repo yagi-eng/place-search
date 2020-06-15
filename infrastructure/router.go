@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"github.com/yagi-eng/virtual-travel/interfaces/controllers"
+	"github.com/yagi-eng/place-search/interfaces/controllers"
 
 	"github.com/labstack/echo"
 )

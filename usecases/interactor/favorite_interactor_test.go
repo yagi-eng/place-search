@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	mock_gateway "github.com/yagi-eng/virtual-travel/mock/gateway"
-	mock_ipresenter "github.com/yagi-eng/virtual-travel/mock/presenter"
-	mock_repository "github.com/yagi-eng/virtual-travel/mock/repository"
-	"github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
-	"github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
+	mock_gateway "github.com/yagi-eng/place-search/mock/gateway"
+	mock_ipresenter "github.com/yagi-eng/place-search/mock/presenter"
+	mock_repository "github.com/yagi-eng/place-search/mock/repository"
+	"github.com/yagi-eng/place-search/usecases/dto/favoritedto"
+	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
 )
 
 const userIDSuccess = uint(10)

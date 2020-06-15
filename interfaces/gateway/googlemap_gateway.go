@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	"github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
+	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
 
 	"github.com/sirupsen/logrus"
 	"googlemaps.github.io/maps"

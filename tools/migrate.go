@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/yagi-eng/virtual-travel/domain/model"
-	"github.com/yagi-eng/virtual-travel/infrastructure"
+	"github.com/yagi-eng/place-search/domain/model"
+	"github.com/yagi-eng/place-search/infrastructure"
 
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"

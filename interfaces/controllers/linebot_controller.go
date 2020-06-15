@@ -4,9 +4,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
-	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
-	"github.com/yagi-eng/virtual-travel/usecases/interactor/usecase"
+	"github.com/yagi-eng/place-search/usecases/dto/favoritedto"
+	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
+	"github.com/yagi-eng/place-search/usecases/interactor/usecase"
 
 	"github.com/labstack/echo"
 	"github.com/line/line-bot-sdk-go/linebot"

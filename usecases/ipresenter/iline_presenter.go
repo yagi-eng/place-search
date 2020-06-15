@@ -1,8 +1,8 @@
 package ipresenter
 
 import (
-	"github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
-	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
+	"github.com/yagi-eng/place-search/usecases/dto/favoritedto"
+	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
 )
 
 // ILinePresenter LINEBOTプレゼンタ

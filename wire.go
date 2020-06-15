@@ -3,16 +3,16 @@
 package main
 
 import (
-	"github.com/yagi-eng/virtual-travel/domain/repository"
-	"github.com/yagi-eng/virtual-travel/infrastructure"
-	"github.com/yagi-eng/virtual-travel/infrastructure/database"
-	"github.com/yagi-eng/virtual-travel/interfaces/controllers"
-	"github.com/yagi-eng/virtual-travel/interfaces/gateway"
-	"github.com/yagi-eng/virtual-travel/interfaces/presenter"
-	"github.com/yagi-eng/virtual-travel/usecases/igateway"
-	"github.com/yagi-eng/virtual-travel/usecases/interactor"
-	"github.com/yagi-eng/virtual-travel/usecases/interactor/usecase"
-	"github.com/yagi-eng/virtual-travel/usecases/ipresenter"
+	"github.com/yagi-eng/place-search/domain/repository"
+	"github.com/yagi-eng/place-search/infrastructure"
+	"github.com/yagi-eng/place-search/infrastructure/database"
+	"github.com/yagi-eng/place-search/interfaces/controllers"
+	"github.com/yagi-eng/place-search/interfaces/gateway"
+	"github.com/yagi-eng/place-search/interfaces/presenter"
+	"github.com/yagi-eng/place-search/usecases/igateway"
+	"github.com/yagi-eng/place-search/usecases/interactor"
+	"github.com/yagi-eng/place-search/usecases/interactor/usecase"
+	"github.com/yagi-eng/place-search/usecases/ipresenter"
 
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"

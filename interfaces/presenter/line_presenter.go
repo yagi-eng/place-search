@@ -5,9 +5,9 @@ import (
 	"os"
 	"unicode/utf8"
 
-	"github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
-	"github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
-	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
+	"github.com/yagi-eng/place-search/usecases/dto/favoritedto"
+	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
+	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 	"github.com/sirupsen/logrus"

@@ -1,2 +1,2 @@
 release: ./bin/tools
-web: virtual-travel
+web: place-search

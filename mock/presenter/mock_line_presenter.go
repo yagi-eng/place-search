@@ -6,8 +6,8 @@ package mock_ipresenter
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	favoritedto "github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
-	searchdto "github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
+	favoritedto "github.com/yagi-eng/place-search/usecases/dto/favoritedto"
+	searchdto "github.com/yagi-eng/place-search/usecases/dto/searchdto"
 	reflect "reflect"
 )
 

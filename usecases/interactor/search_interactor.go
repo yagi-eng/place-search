@@ -3,9 +3,9 @@ package interactor
 import (
 	"os"
 
-	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
-	"github.com/yagi-eng/virtual-travel/usecases/igateway"
-	"github.com/yagi-eng/virtual-travel/usecases/ipresenter"
+	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
+	"github.com/yagi-eng/place-search/usecases/igateway"
+	"github.com/yagi-eng/place-search/usecases/ipresenter"
 )
 
 // SearchInteractor 検索インタラクタ

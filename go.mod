@@ -1,4 +1,4 @@
-module github.com/yagi-eng/virtual-travel
+module github.com/yagi-eng/place-search
 
 go 1.14
 

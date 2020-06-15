@@ -5,10 +5,10 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	mock_gateway "github.com/yagi-eng/virtual-travel/mock/gateway"
-	mock_ipresenter "github.com/yagi-eng/virtual-travel/mock/presenter"
-	"github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
-	"github.com/yagi-eng/virtual-travel/usecases/dto/searchdto"
+	mock_gateway "github.com/yagi-eng/place-search/mock/gateway"
+	mock_ipresenter "github.com/yagi-eng/place-search/mock/presenter"
+	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
+	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
 )
 
 // TestHundle1

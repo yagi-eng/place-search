@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/yagi-eng/virtual-travel/usecases/dto/favoritedto"
+import "github.com/yagi-eng/place-search/usecases/dto/favoritedto"
 
 // IFavoriteUseCase お気に入りユースケース
 type IFavoriteUseCase interface {

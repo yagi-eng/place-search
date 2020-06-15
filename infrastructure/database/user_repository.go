@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/yagi-eng/virtual-travel/domain/model"
+	"github.com/yagi-eng/place-search/domain/model"
 
 	"github.com/jinzhu/gorm"
 )

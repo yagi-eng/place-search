@@ -6,7 +6,7 @@ package mock_igateway
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	googlemapdto "github.com/yagi-eng/virtual-travel/usecases/dto/googlemapdto"
+	googlemapdto "github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
 	reflect "reflect"
 )
 
