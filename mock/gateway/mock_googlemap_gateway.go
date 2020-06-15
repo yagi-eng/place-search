@@ -48,17 +48,17 @@ func (mr *MockIGoogleMapGatewayMockRecorder) GetPlaceDetailsAndPhotoURLsFromQuer
 }
 
 // GetPlaceDetailsAndPhotoURLsFromLatLng mocks base method
-func (m *MockIGoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromLatLng(arg0, arg1 float64) []googlemapdto.Output {
+func (m *MockIGoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromLatLng(arg0 string, arg1, arg2 float64) []googlemapdto.Output {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPlaceDetailsAndPhotoURLsFromLatLng", arg0, arg1)
+	ret := m.ctrl.Call(m, "GetPlaceDetailsAndPhotoURLsFromLatLng", arg0, arg1, arg2)
 	ret0, _ := ret[0].([]googlemapdto.Output)
 	return ret0
 }
 
 // GetPlaceDetailsAndPhotoURLsFromLatLng indicates an expected call of GetPlaceDetailsAndPhotoURLsFromLatLng
-func (mr *MockIGoogleMapGatewayMockRecorder) GetPlaceDetailsAndPhotoURLsFromLatLng(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockIGoogleMapGatewayMockRecorder) GetPlaceDetailsAndPhotoURLsFromLatLng(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPlaceDetailsAndPhotoURLsFromLatLng", reflect.TypeOf((*MockIGoogleMapGateway)(nil).GetPlaceDetailsAndPhotoURLsFromLatLng), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPlaceDetailsAndPhotoURLsFromLatLng", reflect.TypeOf((*MockIGoogleMapGateway)(nil).GetPlaceDetailsAndPhotoURLsFromLatLng), arg0, arg1, arg2)
 }
 
 // GetPlaceDetailsAndPhotoURLs mocks base method

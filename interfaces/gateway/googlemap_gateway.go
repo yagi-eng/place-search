@@ -51,8 +51,8 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromQuery(q string) 
 }
 
 // GetPlaceDetailsAndPhotoURLsFromLatLng 経度/緯度に基づき、プレイスの詳細情報を取得する
-func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromLatLng(lat float64, lng float64) []googlemapdto.Output {
-	places := gateway.searchPlacesWithLatLng(lat, lng)
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromLatLng(q string, lat float64, lng float64) []googlemapdto.Output {
+	places := gateway.searchPlacesWithLatLng(q, lat, lng)
 	placeIDs := gateway.getPlaceIDs(places.Results)
 
 	return gateway.GetPlaceDetailsAndPhotoURLs(placeIDs, false)
@@ -124,9 +124,9 @@ func (gateway *GoogleMapGateway) searchPlacesWithQuery(q string) maps.PlacesSear
 }
 
 // searchPlacesWithLatLng 経度/緯度に基づき、プレイスを検索する
-func (gateway *GoogleMapGateway) searchPlacesWithLatLng(lat float64, lng float64) maps.PlacesSearchResponse {
+func (gateway *GoogleMapGateway) searchPlacesWithLatLng(q string, lat float64, lng float64) maps.PlacesSearchResponse {
 	r := &maps.TextSearchRequest{
-		Query:    os.Getenv("QUERY"),
+		Query:    q,
 		Language: "ja",
 		Location: &maps.LatLng{Lat: lat, Lng: lng},
 		Radius:   500,
