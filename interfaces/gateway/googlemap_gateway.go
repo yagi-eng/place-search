@@ -34,6 +34,7 @@ const maxDetailsOfFavorite = 3
 // photoAPIURL Google Maps APIのURL
 // SDKでは画像をURL形式で取得できないためAPIを使用
 const photoAPIURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference="
+const noImageURL = "https://1.bp.blogspot.com/-D2I7Z7-HLGU/Xlyf7OYUi8I/AAAAAAABXq4/jZ0035aDGiE5dP3WiYhlSqhhMgGy8p7zACNcBGAsYHQ/s1600/no_image_square.jpg"
 
 /*****
 *
@@ -72,7 +73,10 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLs(placeIDs []string, 
 		}
 
 		placeDetail := gateway.getPlaceDetail(placeID)
-		placePhotoURL := gateway.getPlacePhotoURL(placeDetail.Photos[0].PhotoReference)
+		placePhotoURL := noImageURL
+		if len(placeDetail.Photos) > 0 {
+			placePhotoURL = gateway.getPlacePhotoURL(placeDetail.Photos[0].PhotoReference)
+		}
 
 		googleMapOutput := googlemapdto.Output{
 			Name:     placeDetail.Name,
