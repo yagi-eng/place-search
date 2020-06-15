@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -89,7 +88,13 @@ func (controller *LinebotController) replyToLocationMessage(e *linebot.Event) {
 
 	lat := msg.Latitude
 	lng := msg.Longitude
-	fmt.Println(lat, lng)
+
+	searchInput := searchdto.Input{
+		ReplyToken: e.ReplyToken,
+		Lat:        lat,
+		Lng:        lng,
+	}
+	controller.searchInteractor.Hundle(searchInput)
 }
 
 func (controller *LinebotController) replyToEventTypePostback(e *linebot.Event) {

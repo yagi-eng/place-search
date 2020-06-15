@@ -4,4 +4,6 @@ package searchdto
 type Input struct {
 	ReplyToken string
 	Q          string
+	Lat        float64
+	Lng        float64
 }

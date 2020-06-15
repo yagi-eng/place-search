@@ -43,7 +43,15 @@ const photoAPIURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=4
 
 // GetPlaceDetailsAndPhotoURLsFromQuery キーワードに基づき、プレイスの詳細情報を取得する
 func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromQuery(q string) []googlemapdto.Output {
-	places := gateway.searchPlaces(q)
+	places := gateway.searchPlacesWithQuery(q)
+	placeIDs := gateway.getPlaceIDs(places.Results)
+
+	return gateway.GetPlaceDetailsAndPhotoURLs(placeIDs, false)
+}
+
+// GetPlaceDetailsAndPhotoURLsFromLatLng 経度/緯度に基づき、プレイスの詳細情報を取得する
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromLatLng(lat float64, lng float64) []googlemapdto.Output {
+	places := gateway.searchPlacesWithLatLng(lat, lng)
 	placeIDs := gateway.getPlaceIDs(places.Results)
 
 	return gateway.GetPlaceDetailsAndPhotoURLs(placeIDs, false)
@@ -95,13 +103,29 @@ func (gateway *GoogleMapGateway) getPlaceIDs(places []maps.PlacesSearchResult) [
 *
 ******/
 
-// searchPlaces キーワードに基づき、プレイスを検索する
-func (gateway *GoogleMapGateway) searchPlaces(q string) maps.PlacesSearchResponse {
+// searchPlacesWithQuery キーワードに基づき、プレイスを検索する
+func (gateway *GoogleMapGateway) searchPlacesWithQuery(q string) maps.PlacesSearchResponse {
 	r := &maps.TextSearchRequest{
 		Query:    q,
 		Language: "ja",
 		Location: &maps.LatLng{Lat: 35.658517, Lng: 139.70133399999997}, // 渋谷
 		Radius:   50000,
+	}
+
+	res, err := gateway.gmc.TextSearch(context.Background(), r)
+	if err != nil {
+		logrus.Fatal("Error GoogleMap TextSearch: %v", err)
+	}
+	return res
+}
+
+// searchPlacesWithLatLng 経度/緯度に基づき、プレイスを検索する
+func (gateway *GoogleMapGateway) searchPlacesWithLatLng(lat float64, lng float64) maps.PlacesSearchResponse {
+	r := &maps.TextSearchRequest{
+		Query:    os.Getenv("QUERY"),
+		Language: "ja",
+		Location: &maps.LatLng{Lat: lat, Lng: lng},
+		Radius:   500,
 	}
 
 	res, err := gateway.gmc.TextSearch(context.Background(), r)
