@@ -26,10 +26,10 @@ func NewGoogleMapGateway() *GoogleMapGateway {
 }
 
 // maxDetailsOfSearch 検索結果の最大取得件数
-const maxDetailsOfSearch = 3
+const maxDetailsOfSearch = 4
 
 // maxDetailsOfFavorite お気に入り一覧の最大表示件数
-const maxDetailsOfFavorite = 3
+const maxDetailsOfFavorite = 10
 
 // photoAPIURL Google Maps APIのURL
 // SDKでは画像をURL形式で取得できないためAPIを使用
