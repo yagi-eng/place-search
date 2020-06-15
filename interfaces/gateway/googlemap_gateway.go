@@ -113,9 +113,22 @@ func (gateway *GoogleMapGateway) searchPlaces(q string) maps.PlacesSearchRespons
 
 // getPlaceDetail プレイスの詳細情報を取得する
 func (gateway *GoogleMapGateway) getPlaceDetail(placeID string) maps.PlaceDetailsResult {
+	nameFM, _ := maps.ParsePlaceDetailsFieldMask("name")
+	placeIDFM, _ := maps.ParsePlaceDetailsFieldMask("place_id")
+	addrFM, _ := maps.ParsePlaceDetailsFieldMask("formatted_address")
+	urlFM, _ := maps.ParsePlaceDetailsFieldMask("url")
+	photoFM, _ := maps.ParsePlaceDetailsFieldMask("photos")
+
 	r := &maps.PlaceDetailsRequest{
 		PlaceID:  placeID,
 		Language: "ja",
+		Fields: []maps.PlaceDetailsFieldMask{
+			nameFM,
+			placeIDFM,
+			addrFM,
+			urlFM,
+			photoFM,
+		},
 	}
 
 	res, err := gateway.gmc.PlaceDetails(context.Background(), r)
