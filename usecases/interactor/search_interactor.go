@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
 	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
 	"github.com/yagi-eng/place-search/usecases/igateway"
 	"github.com/yagi-eng/place-search/usecases/ipresenter"
@@ -29,15 +28,16 @@ func NewSearchInteractor(
 
 // Hundle 検索する
 func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
-	var googleMapOutputs []googlemapdto.Output
+	q := ""
 	if in.Q != "" {
-		query := os.Getenv("QUERY")
-		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromQuery(in.Q + " " + query)
-	} else if in.Lat != 0 && in.Lng != 0 {
-		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromLatLng(in.Lat, in.Lng)
+		q = in.Q + " " + os.Getenv("QUERY")
+	} else if in.Addr != "" {
+		q = os.Getenv("QUERY") + " " + in.Addr
 	} else {
 		logrus.Fatal("Error unexpected user request")
 	}
+
+	googleMapOutputs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromQuery(q)
 
 	out := searchdto.Output{
 		Q:                in.Q,

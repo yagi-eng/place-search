@@ -86,13 +86,10 @@ func (controller *LinebotController) replyToTextMessage(e *linebot.Event) {
 func (controller *LinebotController) replyToLocationMessage(e *linebot.Event) {
 	msg := e.Message.(*linebot.LocationMessage)
 
-	lat := msg.Latitude
-	lng := msg.Longitude
-
 	searchInput := searchdto.Input{
 		ReplyToken: e.ReplyToken,
-		Lat:        lat,
-		Lng:        lng,
+		Q:          msg.Title,
+		Addr:       msg.Address,
 	}
 	controller.searchInteractor.Hundle(searchInput)
 }
