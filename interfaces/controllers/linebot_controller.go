@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -50,43 +51,64 @@ func (controller *LinebotController) CatchEvents() echo.HandlerFunc {
 
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage {
-				msg := event.Message.(*linebot.TextMessage).Text
-
-				if msg == "お気に入り" {
-					favoriteGetInput := favoritedto.GetInput{
-						ReplyToken: event.ReplyToken,
-						LineUserID: event.Source.UserID,
-					}
-					controller.favoriteInteractor.Get(favoriteGetInput)
-				} else {
-					searchInput := searchdto.Input{
-						ReplyToken: event.ReplyToken,
-						Q:          msg,
-					}
-					controller.searchInteractor.Hundle(searchInput)
+				switch event.Message.(type) {
+				case *linebot.TextMessage:
+					controller.replyToTextMessage(event)
+				case *linebot.LocationMessage:
+					controller.replyToLocationMessage(event)
 				}
 			} else if event.Type == linebot.EventTypePostback {
-				dataMap := createDataMap(event.Postback.Data)
-
-				if dataMap["action"] == "addFavorite" {
-					favoriteAddInput := favoritedto.AddInput{
-						ReplyToken: event.ReplyToken,
-						LineUserID: event.Source.UserID,
-						PlaceID:    dataMap["placeId"],
-					}
-					controller.favoriteInteractor.Add(favoriteAddInput)
-				} else if dataMap["action"] == "removeFavorite" {
-					favoriteRemoveInput := favoritedto.RemoveInput{
-						ReplyToken: event.ReplyToken,
-						LineUserID: event.Source.UserID,
-						PlaceID:    dataMap["placeId"],
-					}
-					controller.favoriteInteractor.Remove(favoriteRemoveInput)
-				}
+				controller.replyToEventTypePostback(event)
 			}
 		}
 
 		return nil
+	}
+}
+
+func (controller *LinebotController) replyToTextMessage(e *linebot.Event) {
+	msg := e.Message.(*linebot.TextMessage).Text
+
+	if msg == "お気に入り" {
+		favoriteGetInput := favoritedto.GetInput{
+			ReplyToken: e.ReplyToken,
+			LineUserID: e.Source.UserID,
+		}
+		controller.favoriteInteractor.Get(favoriteGetInput)
+	} else {
+		searchInput := searchdto.Input{
+			ReplyToken: e.ReplyToken,
+			Q:          msg,
+		}
+		controller.searchInteractor.Hundle(searchInput)
+	}
+}
+
+func (controller *LinebotController) replyToLocationMessage(e *linebot.Event) {
+	msg := e.Message.(*linebot.LocationMessage)
+
+	lat := msg.Latitude
+	lng := msg.Longitude
+	fmt.Println(lat, lng)
+}
+
+func (controller *LinebotController) replyToEventTypePostback(e *linebot.Event) {
+	dataMap := createDataMap(e.Postback.Data)
+
+	if dataMap["action"] == "addFavorite" {
+		favoriteAddInput := favoritedto.AddInput{
+			ReplyToken: e.ReplyToken,
+			LineUserID: e.Source.UserID,
+			PlaceID:    dataMap["placeId"],
+		}
+		controller.favoriteInteractor.Add(favoriteAddInput)
+	} else if dataMap["action"] == "removeFavorite" {
+		favoriteRemoveInput := favoritedto.RemoveInput{
+			ReplyToken: e.ReplyToken,
+			LineUserID: e.Source.UserID,
+			PlaceID:    dataMap["placeId"],
+		}
+		controller.favoriteInteractor.Remove(favoriteRemoveInput)
 	}
 }
 
