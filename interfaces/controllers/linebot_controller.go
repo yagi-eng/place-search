@@ -88,7 +88,8 @@ func (controller *LinebotController) replyToLocationMessage(e *linebot.Event) {
 
 	searchInput := searchdto.Input{
 		ReplyToken: e.ReplyToken,
-		Q:          msg.Address,
+		Q:          msg.Title,
+		Addr:       msg.Address,
 		Lat:        msg.Latitude,
 		Lng:        msg.Longitude,
 	}

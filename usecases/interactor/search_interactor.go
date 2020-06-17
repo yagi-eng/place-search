@@ -34,7 +34,7 @@ func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
 		q := in.Q + " " + os.Getenv("QUERY")
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsWithQuery(q)
 	} else if isLocalMessage(in.Q, in.Lat, in.Lng) {
-		q := os.Getenv("QUERY") + " " + in.Q
+		q := os.Getenv("QUERY") + " " + in.Addr
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q, in.Lat, in.Lng)
 	} else {
 		logrus.Error("Error unexpected user request")
