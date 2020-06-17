@@ -52,7 +52,7 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQuery(q string) 
 
 // GetPlaceDetailsAndPhotoURLsWithQueryLatLng キーワード、経度/緯度に基づき、プレイスの詳細情報を取得する
 func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q string, lat float64, lng float64) []googlemapdto.Output {
-	places := gateway.searchPlacesWithLatLng(q, lat, lng)
+	places := gateway.searchPlacesWithQueryLatLng(q, lat, lng)
 	placeIDs := gateway.getPlaceIDs(places.Results)
 
 	return gateway.GetPlaceDetailsAndPhotoURLs(placeIDs, false)
@@ -124,8 +124,8 @@ func (gateway *GoogleMapGateway) searchPlacesWithQuery(q string) maps.PlacesSear
 	return res
 }
 
-// searchPlacesWithLatLng キーワード、経度/緯度に基づき、プレイスを検索する
-func (gateway *GoogleMapGateway) searchPlacesWithLatLng(q string, lat float64, lng float64) maps.PlacesSearchResponse {
+// searchPlacesWithQueryLatLng キーワード、経度/緯度に基づき、プレイスを検索する
+func (gateway *GoogleMapGateway) searchPlacesWithQueryLatLng(q string, lat float64, lng float64) maps.PlacesSearchResponse {
 	r := &maps.TextSearchRequest{
 		Query:    q,
 		Language: "ja",
