@@ -113,7 +113,7 @@ func (gateway *GoogleMapGateway) searchPlacesWithQuery(q string) maps.PlacesSear
 		Query:    q,
 		Language: "ja",
 		Location: &maps.LatLng{Lat: 35.658517, Lng: 139.70133399999997}, // 渋谷
-		Radius:   50000,
+		Radius:   10,
 	}
 
 	res, err := gateway.gmc.TextSearch(context.Background(), r)
