@@ -24,7 +24,7 @@ func TestHundle1(t *testing.T) {
 
 	mockGoogleMapGW := mock_gateway.NewMockIGoogleMapGateway(ctrl)
 	mockGoogleMapGW.EXPECT().
-		GetPlaceDetailsAndPhotoURLsFromQuery(q + query).
+		GetPlaceDetailsAndPhotoURLsWithQuery(q + query).
 		Return(gmos)
 
 	expected := searchdto.Output{

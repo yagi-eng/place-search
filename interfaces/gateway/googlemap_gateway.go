@@ -42,16 +42,16 @@ const noImageURL = "https://1.bp.blogspot.com/-D2I7Z7-HLGU/Xlyf7OYUi8I/AAAAAAABX
 *
 ******/
 
-// GetPlaceDetailsAndPhotoURLsFromQuery キーワードに基づき、プレイスの詳細情報を取得する
-func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromQuery(q string) []googlemapdto.Output {
+// GetPlaceDetailsAndPhotoURLsWithQuery キーワードに基づき、プレイスの詳細情報を取得する
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQuery(q string) []googlemapdto.Output {
 	places := gateway.searchPlacesWithQuery(q)
 	placeIDs := gateway.getPlaceIDs(places.Results)
 
 	return gateway.GetPlaceDetailsAndPhotoURLs(placeIDs, false)
 }
 
-// GetPlaceDetailsAndPhotoURLsFromLatLng 経度/緯度に基づき、プレイスの詳細情報を取得する
-func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsFromLatLng(q string, lat float64, lng float64) []googlemapdto.Output {
+// GetPlaceDetailsAndPhotoURLsWithQueryLatLng キーワード、経度/緯度に基づき、プレイスの詳細情報を取得する
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q string, lat float64, lng float64) []googlemapdto.Output {
 	places := gateway.searchPlacesWithLatLng(q, lat, lng)
 	placeIDs := gateway.getPlaceIDs(places.Results)
 
