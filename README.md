@@ -1,7 +1,11 @@
 開発中
 
+
+## デモ動画
+[Twitter参照](https://twitter.com/i/status/1273208922682191875)
+
 ## お試しはこちら
-LINE友だち追加の必要があります
+LINE友だち追加でお試し頂けます。
 
 ### 飲食店検索（Resto Clip）
 https://lin.ee/R5mD4Dt
@@ -30,6 +34,3 @@ https://lin.ee/1AaLS1PfJ
 
 ### お気に入り解除
 お気に入り一覧で「Remove」をタップすると、場所をお気に入り解除できる。
-
-## デモ動画
-[Twitter参照]()
