@@ -30,19 +30,22 @@ func NewSearchInteractor(
 
 // Hundle 検索する
 func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
+	outQ := ""
 	var googleMapOutputs []googlemapdto.Output
 	if isNomination(in.Q, in.Lat, in.Lng) {
-		q := in.Q + " " + os.Getenv("QUERY")
+		outQ = in.Q
+		q := outQ + " " + os.Getenv("QUERY")
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsWithQuery(q)
 	} else if isOnlyLocaleInfo(in.Addr, in.Lat, in.Lng) {
-		q := os.Getenv("QUERY") + " " + excerptAddr(in.Addr)
+		outQ = excerptAddr(in.Addr)
+		q := os.Getenv("QUERY") + " " + outQ
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q, in.Lat, in.Lng)
 	} else {
 		logrus.Error("Error unexpected user request")
 	}
 
 	out := searchdto.Output{
-		Q:                in.Q,
+		Q:                outQ,
 		ReplyToken:       in.ReplyToken,
 		GoogleMapOutputs: googleMapOutputs,
 	}
