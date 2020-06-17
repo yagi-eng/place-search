@@ -33,7 +33,7 @@ func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
 	if isNomination(in.Q, in.Lat, in.Lng) {
 		q := in.Q + " " + os.Getenv("QUERY")
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsWithQuery(q)
-	} else if isLocalMessage(in.Q, in.Lat, in.Lng) {
+	} else if isOnlyLocaleInfo(in.Addr, in.Lat, in.Lng) {
 		q := os.Getenv("QUERY") + " " + in.Addr
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q, in.Lat, in.Lng)
 	} else {
@@ -52,6 +52,6 @@ func isNomination(q string, lat float64, lng float64) bool {
 	return q != "" && lat == 0 && lng == 0
 }
 
-func isLocalMessage(addr string, lat float64, lng float64) bool {
+func isOnlyLocaleInfo(addr string, lat float64, lng float64) bool {
 	return addr != "" && lat != 0 && lng != 0
 }
