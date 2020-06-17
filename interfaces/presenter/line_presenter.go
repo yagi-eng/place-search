@@ -142,13 +142,13 @@ func (presenter *LinePresenter) replyCarouselColumn(
 	)
 
 	if _, err := presenter.bot.ReplyMessage(replyToken, res).Do(); err != nil {
-		logrus.Fatalf("Error LINEBOT replying message: %v", err)
+		logrus.Errorf("Error LINEBOT replying message: %v", err)
 	}
 }
 
 func (presenter *LinePresenter) replyMessage(msg string, replyToken string) {
 	res := linebot.NewTextMessage(msg)
 	if _, err := presenter.bot.ReplyMessage(replyToken, res).Do(); err != nil {
-		logrus.Fatalf("Error LINEBOT replying message: %v", err)
+		logrus.Errorf("Error LINEBOT replying message: %v", err)
 	}
 }

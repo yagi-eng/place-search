@@ -118,7 +118,8 @@ func (gateway *GoogleMapGateway) searchPlacesWithQuery(q string) maps.PlacesSear
 
 	res, err := gateway.gmc.TextSearch(context.Background(), r)
 	if err != nil {
-		logrus.Fatal("Error GoogleMap TextSearch: %v", err)
+		logrus.Errorf("Error GoogleMap TextSearch: %v", err)
+		res = maps.PlacesSearchResponse{}
 	}
 	return res
 }
@@ -134,7 +135,8 @@ func (gateway *GoogleMapGateway) searchPlacesWithLatLng(q string, lat float64, l
 
 	res, err := gateway.gmc.TextSearch(context.Background(), r)
 	if err != nil {
-		logrus.Fatal("Error GoogleMap TextSearch: %v", err)
+		logrus.Errorf("Error GoogleMap TextSearch: %v", err)
+		res = maps.PlacesSearchResponse{}
 	}
 	return res
 }
@@ -161,7 +163,8 @@ func (gateway *GoogleMapGateway) getPlaceDetail(placeID string) maps.PlaceDetail
 
 	res, err := gateway.gmc.PlaceDetails(context.Background(), r)
 	if err != nil {
-		logrus.Fatal("Error GoogleMap PlaceDetails: %v", err)
+		logrus.Errorf("Error GoogleMap PlaceDetails: %v", err)
+		res = maps.PlaceDetailsResult{}
 	}
 	return res
 }
