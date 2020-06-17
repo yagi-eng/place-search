@@ -33,8 +33,8 @@ func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
 	if isNomination(in.Q, in.Lat, in.Lng) {
 		q := in.Q + " " + os.Getenv("QUERY")
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromQuery(q)
-	} else if isLocalMessage(in.Addr, in.Lat, in.Lng) {
-		q := os.Getenv("QUERY") + " " + in.Addr
+	} else if isLocalMessage(in.Q, in.Lat, in.Lng) {
+		q := os.Getenv("QUERY") + " " + in.Q
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsFromLatLng(q, in.Lat, in.Lng)
 	} else {
 		logrus.Error("Error unexpected user request")
