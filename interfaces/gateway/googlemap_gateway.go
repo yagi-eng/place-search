@@ -123,7 +123,7 @@ func (gateway *GoogleMapGateway) searchPlacesWithQuery(q string) maps.PlacesSear
 	return res
 }
 
-// searchPlacesWithLatLng 経度/緯度に基づき、プレイスを検索する
+// searchPlacesWithLatLng キーワード、経度/緯度に基づき、プレイスを検索する
 func (gateway *GoogleMapGateway) searchPlacesWithLatLng(q string, lat float64, lng float64) maps.PlacesSearchResponse {
 	r := &maps.TextSearchRequest{
 		Query:    q,
