@@ -32,8 +32,4 @@ https://lin.ee/1AaLS1PfJ
 お気に入り一覧で「Remove」をタップすると、場所をお気に入り解除できる。
 
 ## デモ動画
-### ショート
-![short](https://p9.f1.n0.cdn.getcloudapp.com/items/NQuggG5P/VID_20200617_163635.gif)
-
-### ロング
 [Twitter参照]()
