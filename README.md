@@ -1,6 +1,3 @@
-開発中
-
-
 ## デモ動画
 [Twitter参照](https://twitter.com/i/status/1273208922682191875)
 
@@ -16,6 +13,11 @@ https://lin.ee/R5mD4Dt
 https://lin.ee/1AaLS1PfJ
 
 ![QRコード](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/113263/796db3f1-8b48-543b-820d-8ff59e4fb35a.png)
+
+## Qiita
+詳細をまとめたQiitaはこちら
+
+[Goとクリーンアーキテクチャで飲食店検索ができるLINE BOT作ってみた](https://qiita.com/yagi_eng/items/983a7cd36b63a2f0ffac)
 
 ## 機能一覧
 ### キーワード検索
