@@ -13,6 +13,8 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
+const msgSetPram = "パラメータを正しく設定してください。"
+
 // APIController APIコントローラ
 type APIController struct {
 	favoriteInteractor usecase.IFavoriteUseCase
@@ -35,9 +37,14 @@ func NewAPIController(
 func (controller *APIController) Search() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		q := c.QueryParam("q")
+		addr := c.QueryParam("addr")
 		latStr := c.QueryParam("lat")
 		lngStr := c.QueryParam("lng")
-		addr := c.QueryParam("addr")
+
+		// TODO Validationはフロントの実装に合わせて要検討
+		if q == "" && (addr == "" || latStr == "" || lngStr == "") {
+			return c.JSON(fasthttp.StatusBadRequest, msgSetPram)
+		}
 
 		lat, lng := float64(0), float64(0)
 		if latStr != "" && lngStr != "" {
@@ -68,6 +75,10 @@ func (controller *APIController) GetFavorites() echo.HandlerFunc {
 		// TODO POSTで受け取る
 		lineUserID := c.QueryParam("line_user_id")
 
+		if lineUserID == "" {
+			return c.JSON(fasthttp.StatusBadRequest, msgSetPram)
+		}
+
 		in := favoritedto.GetInput{
 			LineUserID: lineUserID,
 		}
@@ -83,6 +94,10 @@ func (controller *APIController) AddFavorites() echo.HandlerFunc {
 		// TODO POSTで受け取る
 		lineUserID := c.QueryParam("line_user_id")
 		placeID := c.QueryParam("place_id")
+
+		if lineUserID == "" || placeID == "" {
+			return c.JSON(fasthttp.StatusBadRequest, msgSetPram)
+		}
 
 		in := favoritedto.AddInput{
 			LineUserID: lineUserID,
@@ -100,6 +115,10 @@ func (controller *APIController) RemoveFavorites() echo.HandlerFunc {
 		// TODO POSTで受け取る
 		lineUserID := c.QueryParam("line_user_id")
 		placeID := c.QueryParam("place_id")
+
+		if lineUserID == "" || placeID == "" {
+			return c.JSON(fasthttp.StatusBadRequest, msgSetPram)
+		}
 
 		in := favoritedto.RemoveInput{
 			LineUserID: lineUserID,
