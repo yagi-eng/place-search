@@ -78,3 +78,20 @@ func (controller *APIController) AddFavorites() echo.HandlerFunc {
 		return c.JSON(fasthttp.StatusOK, out)
 	}
 }
+
+// RemoveFavorites お気に入り削除
+func (controller *APIController) RemoveFavorites() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// TODO POSTで受け取る
+		lineUserID := c.QueryParam("line_user_id")
+		placeID := c.QueryParam("place_id")
+
+		in := favoritedto.RemoveInput{
+			LineUserID: lineUserID,
+			PlaceID:    placeID,
+		}
+		out := controller.favoriteInteractor.Remove(in)
+
+		return c.JSON(fasthttp.StatusOK, out)
+	}
+}

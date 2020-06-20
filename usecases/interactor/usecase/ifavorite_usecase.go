@@ -6,5 +6,5 @@ import "github.com/yagi-eng/place-search/usecases/dto/favoritedto"
 type IFavoriteUseCase interface {
 	Get(favoritedto.GetInput)
 	Add(favoritedto.AddInput) favoritedto.AddOutput
-	Remove(favoritedto.RemoveInput)
+	Remove(favoritedto.RemoveInput) favoritedto.RemoveOutput
 }
