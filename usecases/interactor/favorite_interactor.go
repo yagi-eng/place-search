@@ -40,7 +40,9 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) favoritedto.G
 		ReplyToken:       in.ReplyToken,
 		GoogleMapOutputs: googleMapOutputs,
 	}
-	interactor.linePresenter.GetFavorites(out)
+	if out.ReplyToken != "" {
+		interactor.linePresenter.GetFavorites(out)
+	}
 
 	return out
 }
@@ -64,7 +66,9 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) favoritedto.A
 		UserExists:     userExists,
 		IsAlreadyAdded: !isAdded,
 	}
-	interactor.linePresenter.AddFavorite(out)
+	if out.ReplyToken != "" {
+		interactor.linePresenter.AddFavorite(out)
+	}
 
 	return out
 }
@@ -88,7 +92,9 @@ func (interactor *FavoriteInteractor) Remove(in favoritedto.RemoveInput) favorit
 		UserExists:       userExists,
 		IsAlreadyRemoved: !isRemoved,
 	}
-	interactor.linePresenter.RemoveFavorite(out)
+	if out.ReplyToken != "" {
+		interactor.linePresenter.RemoveFavorite(out)
+	}
 
 	return out
 }

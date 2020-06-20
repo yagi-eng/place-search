@@ -48,7 +48,9 @@ func (interactor *SearchInteractor) Hundle(in searchdto.Input) searchdto.Output 
 		ReplyToken:       in.ReplyToken,
 		GoogleMapOutputs: googleMapOutputs,
 	}
-	interactor.linePresenter.Search(out)
+	if out.ReplyToken != "" {
+		interactor.linePresenter.Search(out)
+	}
 
 	return out
 }
