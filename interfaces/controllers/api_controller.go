@@ -62,6 +62,21 @@ func (controller *APIController) Search() echo.HandlerFunc {
 	}
 }
 
+// GetFavorites お気に入り一覧表示
+func (controller *APIController) GetFavorites() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// TODO POSTで受け取る
+		lineUserID := c.QueryParam("line_user_id")
+
+		in := favoritedto.GetInput{
+			LineUserID: lineUserID,
+		}
+		out := controller.favoriteInteractor.Get(in)
+
+		return c.JSON(fasthttp.StatusOK, out)
+	}
+}
+
 // AddFavorites お気に入り追加
 func (controller *APIController) AddFavorites() echo.HandlerFunc {
 	return func(c echo.Context) error {

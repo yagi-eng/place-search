@@ -31,7 +31,7 @@ func NewFavoriteInteractor(
 }
 
 // Get お気に入り全件を取得する
-func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
+func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) favoritedto.GetOutput {
 	PlaceIDs := interactor.favoriteRepository.FindAll(in.LineUserID)
 
 	googleMapOutputs := interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLs(PlaceIDs, true)
@@ -41,6 +41,8 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 		GoogleMapOutputs: googleMapOutputs,
 	}
 	interactor.linePresenter.GetFavorites(out)
+
+	return out
 }
 
 // Add お気に入りを追加する

@@ -28,6 +28,7 @@ func (r *Router) Init() {
 
 		favorite := api.Group("/favorite")
 		{
+			favorite.GET("/get", r.ac.GetFavorites())
 			favorite.GET("/add", r.ac.AddFavorites())
 			favorite.GET("/remove", r.ac.RemoveFavorites())
 		}
