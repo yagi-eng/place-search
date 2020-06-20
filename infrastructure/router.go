@@ -8,16 +8,22 @@ import (
 
 // Router ルーティング
 type Router struct {
-	e *echo.Echo
-	c *controllers.LinebotController
+	e  *echo.Echo
+	lc *controllers.LinebotController
+	ac *controllers.APIController
 }
 
 // NewRouter コンストラクタ
-func NewRouter(e *echo.Echo, c *controllers.LinebotController) *Router {
-	return &Router{e: e, c: c}
+func NewRouter(e *echo.Echo, lc *controllers.LinebotController, ac *controllers.APIController) *Router {
+	return &Router{e: e, lc: lc, ac: ac}
 }
 
 // Init ルーティング設定
 func (r *Router) Init() {
-	r.e.POST("/linebot/callback", r.c.CatchEvents())
+	r.e.POST("/linebot/callback", r.lc.CatchEvents())
+
+	api := r.e.Group("/googlemap/api")
+	{
+		api.GET("/search", r.ac.SearchWithQuery())
+	}
 }

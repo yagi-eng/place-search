@@ -13,7 +13,7 @@ require (
 	github.com/line/line-bot-sdk-go v7.4.0+incompatible
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/sirupsen/logrus v1.6.0
+	github.com/valyala/fasthttp v1.14.0
 	go.opencensus.io v0.22.3 // indirect
-	golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd // indirect
 	googlemaps.github.io/maps v1.2.0
 )

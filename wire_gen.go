@@ -31,10 +31,11 @@ func Initialize(e *echo.Echo, db *gorm.DB) *infrastructure.Router {
 	favoriteInteractor := interactor.NewFavoriteInteractor(userRepository, favoriteRepository, googleMapGateway, linePresenter)
 	searchInteractor := interactor.NewSearchInteractor(googleMapGateway, linePresenter)
 	linebotController := controllers.NewLinebotController(favoriteInteractor, searchInteractor)
-	router := infrastructure.NewRouter(e, linebotController)
+	apiController := controllers.NewAPIController(favoriteInteractor, searchInteractor)
+	router := infrastructure.NewRouter(e, linebotController, apiController)
 	return router
 }
 
 // wire.go:
 
-var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), presenter.NewLinePresenter, wire.Bind(new(ipresenter.ILinePresenter), new(*presenter.LinePresenter)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), interactor.NewSearchInteractor, wire.Bind(new(usecase.ISearchUseCase), new(*interactor.SearchInteractor)), controllers.NewLinebotController, infrastructure.NewRouter)
+var superSet = wire.NewSet(database.NewFavoriteRepository, wire.Bind(new(repository.IFavoriteRepository), new(*database.FavoriteRepository)), database.NewUserRepository, wire.Bind(new(repository.IUserRepository), new(*database.UserRepository)), gateway.NewGoogleMapGateway, wire.Bind(new(igateway.IGoogleMapGateway), new(*gateway.GoogleMapGateway)), presenter.NewLinePresenter, wire.Bind(new(ipresenter.ILinePresenter), new(*presenter.LinePresenter)), interactor.NewFavoriteInteractor, wire.Bind(new(usecase.IFavoriteUseCase), new(*interactor.FavoriteInteractor)), interactor.NewSearchInteractor, wire.Bind(new(usecase.ISearchUseCase), new(*interactor.SearchInteractor)), controllers.NewLinebotController, controllers.NewAPIController, infrastructure.NewRouter)

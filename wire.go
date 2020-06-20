@@ -42,6 +42,7 @@ var superSet = wire.NewSet(
 
 	// Controller
 	controllers.NewLinebotController,
+	controllers.NewAPIController,
 
 	// Router
 	infrastructure.NewRouter,
