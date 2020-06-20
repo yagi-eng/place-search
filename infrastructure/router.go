@@ -24,6 +24,6 @@ func (r *Router) Init() {
 
 	api := r.e.Group("/googlemap/api")
 	{
-		api.GET("/search", r.ac.SearchWithQuery())
+		api.GET("/search", r.ac.Search())
 	}
 }

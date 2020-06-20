@@ -89,11 +89,18 @@ func (controller *LinebotController) replyToLocationMessage(e *linebot.Event) {
 	searchInput := searchdto.Input{
 		ReplyToken: e.ReplyToken,
 		Q:          msg.Title,
-		Addr:       msg.Address,
+		Addr:       excerptAddr(msg.Address),
 		Lat:        msg.Latitude,
 		Lng:        msg.Longitude,
 	}
 	controller.searchInteractor.Hundle(searchInput)
+}
+
+// LINEの住所形式は「日本、〒123-4567 東京都新宿区xxx...」なので、
+// 「東京都...」以降のみ抜粋する
+func excerptAddr(fullAddr string) string {
+	addrArr := strings.Split(fullAddr, " ")
+	return addrArr[1]
 }
 
 func (controller *LinebotController) replyToEventTypePostback(e *linebot.Event) {

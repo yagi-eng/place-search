@@ -2,7 +2,6 @@ package interactor
 
 import (
 	"os"
-	"strings"
 
 	"github.com/sirupsen/logrus"
 	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
@@ -29,7 +28,7 @@ func NewSearchInteractor(
 }
 
 // Hundle 検索する
-func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
+func (interactor *SearchInteractor) Hundle(in searchdto.Input) searchdto.Output {
 	outQ := ""
 	var googleMapOutputs []googlemapdto.Output
 	if isNomination(in.Q, in.Lat, in.Lng) {
@@ -37,7 +36,7 @@ func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
 		q := outQ + " " + os.Getenv("QUERY")
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsWithQuery(q)
 	} else if isOnlyLocaleInfo(in.Addr, in.Lat, in.Lng) {
-		outQ = excerptAddr(in.Addr)
+		outQ = in.Addr
 		q := os.Getenv("QUERY") + " " + outQ
 		googleMapOutputs = interactor.googleMapGateway.GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q, in.Lat, in.Lng)
 	} else {
@@ -50,6 +49,8 @@ func (interactor *SearchInteractor) Hundle(in searchdto.Input) {
 		GoogleMapOutputs: googleMapOutputs,
 	}
 	interactor.linePresenter.Search(out)
+
+	return out
 }
 
 func isNomination(q string, lat float64, lng float64) bool {
@@ -58,11 +59,4 @@ func isNomination(q string, lat float64, lng float64) bool {
 
 func isOnlyLocaleInfo(addr string, lat float64, lng float64) bool {
 	return addr != "" && lat != 0 && lng != 0
-}
-
-// LINEの住所形式は「日本、〒123-4567 東京都新宿区xxx...」なので、
-// 「東京都...」以降のみ抜粋する
-func excerptAddr(fullAddr string) string {
-	addrArr := strings.Split(fullAddr, " ")
-	return addrArr[1]
 }
