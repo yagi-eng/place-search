@@ -25,5 +25,10 @@ func (r *Router) Init() {
 	api := r.e.Group("/googlemap/api")
 	{
 		api.GET("/search", r.ac.Search())
+
+		favorite := api.Group("/favorite")
+		{
+			favorite.GET("/add", r.ac.AddFavorites())
+		}
 	}
 }

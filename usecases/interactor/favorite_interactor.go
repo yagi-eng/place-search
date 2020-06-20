@@ -44,7 +44,7 @@ func (interactor *FavoriteInteractor) Get(in favoritedto.GetInput) {
 }
 
 // Add お気に入りを追加する
-func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
+func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) favoritedto.AddOutput {
 	userID := interactor.userRepository.Save(in.LineUserID)
 
 	var userExists bool
@@ -63,6 +63,8 @@ func (interactor *FavoriteInteractor) Add(in favoritedto.AddInput) {
 		IsAlreadyAdded: !isAdded,
 	}
 	interactor.linePresenter.AddFavorite(out)
+
+	return out
 }
 
 // Remove お気に入りを削除する
