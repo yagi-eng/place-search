@@ -22,7 +22,7 @@ func NewRouter(e *echo.Echo, lc *controllers.LinebotController, ac *controllers.
 func (r *Router) Init() {
 	r.e.POST("/linebot/callback", r.lc.CatchEvents())
 
-	api := r.e.Group("/googlemap/api")
+	api := r.e.Group("/api")
 	{
 		api.GET("/search", r.ac.Search())
 
