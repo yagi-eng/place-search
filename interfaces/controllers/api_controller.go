@@ -72,8 +72,7 @@ func (controller *APIController) Search() echo.HandlerFunc {
 // GetFavorites お気に入り一覧表示
 func (controller *APIController) GetFavorites() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// TODO POSTで受け取る
-		lineUserID := c.QueryParam("line_user_id")
+		lineUserID := c.FormValue("line_user_id")
 
 		if lineUserID == "" {
 			return c.JSON(fasthttp.StatusBadRequest, msgSetPram)
@@ -91,9 +90,8 @@ func (controller *APIController) GetFavorites() echo.HandlerFunc {
 // AddFavorites お気に入り追加
 func (controller *APIController) AddFavorites() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// TODO POSTで受け取る
-		lineUserID := c.QueryParam("line_user_id")
-		placeID := c.QueryParam("place_id")
+		lineUserID := c.FormValue("line_user_id")
+		placeID := c.FormValue("place_id")
 
 		if lineUserID == "" || placeID == "" {
 			return c.JSON(fasthttp.StatusBadRequest, msgSetPram)
@@ -112,9 +110,8 @@ func (controller *APIController) AddFavorites() echo.HandlerFunc {
 // RemoveFavorites お気に入り削除
 func (controller *APIController) RemoveFavorites() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// TODO POSTで受け取る
-		lineUserID := c.QueryParam("line_user_id")
-		placeID := c.QueryParam("place_id")
+		lineUserID := c.FormValue("line_user_id")
+		placeID := c.FormValue("place_id")
 
 		if lineUserID == "" || placeID == "" {
 			return c.JSON(fasthttp.StatusBadRequest, msgSetPram)
