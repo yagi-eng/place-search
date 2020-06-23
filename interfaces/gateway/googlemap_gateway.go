@@ -2,7 +2,11 @@ package gateway
 
 import (
 	"context"
+	"errors"
+	"net/http"
+	"net/url"
 	"os"
+	"time"
 
 	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
 
@@ -171,5 +175,21 @@ func (gateway *GoogleMapGateway) getPlaceDetail(placeID string) maps.PlaceDetail
 
 // getPlacePhotoURL プレイスの写真のURLを取得する
 func (gateway *GoogleMapGateway) getPlacePhotoURL(photoReference string) string {
-	return photoAPIURL + photoReference + "&key=" + os.Getenv("GMAP_API_KEY")
+	targetURL := photoAPIURL + photoReference + "&key=" + os.Getenv("GMAP_API_KEY")
+
+	// targetURLのまま返却するとAPIKEYが露出するので、リダイレクト先のURLを返却する
+	RedirectAttemptedError := errors.New("redirect")
+	client := &http.Client{
+		Timeout: time.Duration(3) * time.Second,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return RedirectAttemptedError
+		},
+	}
+	resp, err := client.Head(targetURL)
+	if urlError, ok := err.(*url.Error); ok && urlError.Err == RedirectAttemptedError {
+		return resp.Header["Location"][0]
+	}
+	defer resp.Body.Close()
+	logrus.Errorf("Error GoogleMap getPlacePhotoURL: %v", err)
+	return noImageURL
 }
