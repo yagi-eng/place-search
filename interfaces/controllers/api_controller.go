@@ -1,6 +1,11 @@
 package controllers
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"os"
 	"strconv"
 
 	"github.com/labstack/echo"
@@ -72,7 +77,8 @@ func (controller *APIController) Search() echo.HandlerFunc {
 // GetFavorites お気に入り一覧表示
 func (controller *APIController) GetFavorites() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		lineUserID := c.FormValue("line_user_id")
+		lineIDToken := c.FormValue("line_id_token")
+		lineUserID := getLineUserIDByToken(lineIDToken)
 
 		if lineUserID == "" {
 			return c.JSON(fasthttp.StatusBadRequest, msgSetPram)
@@ -90,7 +96,9 @@ func (controller *APIController) GetFavorites() echo.HandlerFunc {
 // AddFavorites お気に入り追加
 func (controller *APIController) AddFavorites() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		lineUserID := c.FormValue("line_user_id")
+		lineIDToken := c.FormValue("line_id_token")
+
+		lineUserID := getLineUserIDByToken(lineIDToken)
 		placeID := c.FormValue("place_id")
 
 		if lineUserID == "" || placeID == "" {
@@ -110,7 +118,9 @@ func (controller *APIController) AddFavorites() echo.HandlerFunc {
 // RemoveFavorites お気に入り削除
 func (controller *APIController) RemoveFavorites() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		lineUserID := c.FormValue("line_user_id")
+		lineIDToken := c.FormValue("line_id_token")
+
+		lineUserID := getLineUserIDByToken(lineIDToken)
 		placeID := c.FormValue("place_id")
 
 		if lineUserID == "" || placeID == "" {
@@ -125,4 +135,33 @@ func (controller *APIController) RemoveFavorites() echo.HandlerFunc {
 
 		return c.JSON(fasthttp.StatusOK, out)
 	}
+}
+
+type verifyResp struct {
+	Sub string `json:"sub"`
+}
+
+// getLineUserIDByToken tokenからLINEのuserIDを取得する
+func getLineUserIDByToken(idToken string) string {
+	values := url.Values{}
+	values.Add("id_token", idToken)
+	values.Add("client_id", os.Getenv("LIFF_CHANNEL_ID"))
+
+	resp, _ := http.PostForm(
+		"https://api.line.me/oauth2/v2.1/verify",
+		values,
+	)
+
+	body, _ := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+
+	jsonBytes := ([]byte)(string(body))
+	data := new(verifyResp)
+
+	if err := json.Unmarshal(jsonBytes, data); err != nil {
+		logrus.Errorf("Error JSON Unmarshal: %v", err)
+		return ""
+	}
+
+	return data.Sub
 }
