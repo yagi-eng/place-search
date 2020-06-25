@@ -147,15 +147,10 @@ func getLineUserIDByToken(idToken string) string {
 	values.Add("id_token", idToken)
 	values.Add("client_id", os.Getenv("LIFF_CHANNEL_ID"))
 
-	resp, err := http.PostForm(
+	resp, _ := http.PostForm(
 		"https://api.line.me/oauth2/v2.1/verify",
 		values,
 	)
-
-	if err != nil {
-		logrus.Errorf("Error Parsing LINEIDToken: %v", err)
-		return ""
-	}
 
 	body, _ := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
