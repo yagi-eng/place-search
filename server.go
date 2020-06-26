@@ -28,7 +28,9 @@ func main() {
 
 	// Middleware
 	e.Use(middleware.Logger())
-	e.Use(middleware.CORS())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"https://restp-clip-liff.herokuapp.com/", "localhost:3000"},
+	}))
 
 	// DB Connect
 	db, err := infrastructure.Connect()
