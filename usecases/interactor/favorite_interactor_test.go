@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	"github.com/yagi-eng/place-search/domain/model"
 	mock_gateway "github.com/yagi-eng/place-search/mock/gateway"
 	mock_ipresenter "github.com/yagi-eng/place-search/mock/presenter"
 	mock_repository "github.com/yagi-eng/place-search/mock/repository"
 	"github.com/yagi-eng/place-search/usecases/dto/favoritedto"
-	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
 )
 
 const userIDSuccess = uint(10)
@@ -27,8 +27,8 @@ func TestGet1(t *testing.T) {
 	defer ctrl.Finish()
 
 	placeIDs := []string{placeID}
-	gmo := googlemapdto.Output{}
-	gmos := []googlemapdto.Output{gmo}
+	gmo := model.Place{}
+	gmos := []model.Place{gmo}
 
 	mockUserRepo := mock_repository.NewMockIUserRepository(ctrl)
 

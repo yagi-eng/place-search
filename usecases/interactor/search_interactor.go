@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
+	"github.com/yagi-eng/place-search/domain/model"
 	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
 	"github.com/yagi-eng/place-search/usecases/igateway"
 	"github.com/yagi-eng/place-search/usecases/ipresenter"
@@ -30,7 +30,7 @@ func NewSearchInteractor(
 // Hundle 検索する
 func (interactor *SearchInteractor) Hundle(in searchdto.Input) searchdto.Output {
 	outQ := ""
-	var googleMapOutputs []googlemapdto.Output
+	var googleMapOutputs []model.Place
 	if isNomination(in.Q, in.Lat, in.Lng) {
 		outQ = in.Q
 		q := outQ + " " + os.Getenv("QUERY")

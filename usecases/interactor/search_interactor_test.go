@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	"github.com/yagi-eng/place-search/domain/model"
 	mock_gateway "github.com/yagi-eng/place-search/mock/gateway"
 	mock_ipresenter "github.com/yagi-eng/place-search/mock/presenter"
-	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
 	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
 )
 
@@ -19,8 +19,8 @@ func TestHundle1(t *testing.T) {
 
 	q := "東京"
 	query := os.Getenv("QUERY")
-	gmo := googlemapdto.Output{}
-	gmos := []googlemapdto.Output{gmo}
+	gmo := model.Place{}
+	gmos := []model.Place{gmo}
 
 	mockGoogleMapGW := mock_gateway.NewMockIGoogleMapGateway(ctrl)
 	mockGoogleMapGW.EXPECT().

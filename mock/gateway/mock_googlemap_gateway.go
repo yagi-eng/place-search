@@ -6,7 +6,7 @@ package mock_igateway
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	googlemapdto "github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
+	model "github.com/yagi-eng/place-search/domain/model"
 	reflect "reflect"
 )
 
@@ -34,10 +34,10 @@ func (m *MockIGoogleMapGateway) EXPECT() *MockIGoogleMapGatewayMockRecorder {
 }
 
 // GetPlaceDetailsAndPhotoURLsWithQuery mocks base method
-func (m *MockIGoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQuery(arg0 string) []googlemapdto.Output {
+func (m *MockIGoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQuery(arg0 string) []model.Place {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPlaceDetailsAndPhotoURLsWithQuery", arg0)
-	ret0, _ := ret[0].([]googlemapdto.Output)
+	ret0, _ := ret[0].([]model.Place)
 	return ret0
 }
 
@@ -48,10 +48,10 @@ func (mr *MockIGoogleMapGatewayMockRecorder) GetPlaceDetailsAndPhotoURLsWithQuer
 }
 
 // GetPlaceDetailsAndPhotoURLsWithQueryLatLng mocks base method
-func (m *MockIGoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQueryLatLng(arg0 string, arg1, arg2 float64) []googlemapdto.Output {
+func (m *MockIGoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQueryLatLng(arg0 string, arg1, arg2 float64) []model.Place {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPlaceDetailsAndPhotoURLsWithQueryLatLng", arg0, arg1, arg2)
-	ret0, _ := ret[0].([]googlemapdto.Output)
+	ret0, _ := ret[0].([]model.Place)
 	return ret0
 }
 
@@ -62,10 +62,10 @@ func (mr *MockIGoogleMapGatewayMockRecorder) GetPlaceDetailsAndPhotoURLsWithQuer
 }
 
 // GetPlaceDetailsAndPhotoURLs mocks base method
-func (m *MockIGoogleMapGateway) GetPlaceDetailsAndPhotoURLs(arg0 []string, arg1 bool) []googlemapdto.Output {
+func (m *MockIGoogleMapGateway) GetPlaceDetailsAndPhotoURLs(arg0 []string, arg1 bool) []model.Place {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetPlaceDetailsAndPhotoURLs", arg0, arg1)
-	ret0, _ := ret[0].([]googlemapdto.Output)
+	ret0, _ := ret[0].([]model.Place)
 	return ret0
 }
 

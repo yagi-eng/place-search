@@ -1,9 +1,9 @@
 package favoritedto
 
-import "github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
+import "github.com/yagi-eng/place-search/domain/model"
 
 // GetOutput DTO
 type GetOutput struct {
 	ReplyToken       string
-	GoogleMapOutputs []googlemapdto.Output
+	GoogleMapOutputs []model.Place
 }

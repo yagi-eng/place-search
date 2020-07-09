@@ -5,8 +5,8 @@ import (
 	"os"
 	"unicode/utf8"
 
+	"github.com/yagi-eng/place-search/domain/model"
 	"github.com/yagi-eng/place-search/usecases/dto/favoritedto"
-	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
 	"github.com/yagi-eng/place-search/usecases/dto/searchdto"
 
 	"github.com/line/line-bot-sdk-go/linebot"
@@ -111,7 +111,7 @@ func (presenter *LinePresenter) Search(out searchdto.Output) {
 }
 
 func (presenter *LinePresenter) replyCarouselColumn(
-	msgs carouselMsgs, googleMapOutputs []googlemapdto.Output, replyToken string) {
+	msgs carouselMsgs, googleMapOutputs []model.Place, replyToken string) {
 
 	if len(googleMapOutputs) == 0 {
 		presenter.replyMessage(msgs.noResult, replyToken)

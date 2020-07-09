@@ -8,9 +8,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/yagi-eng/place-search/usecases/dto/googlemapdto"
-
 	"github.com/sirupsen/logrus"
+	"github.com/yagi-eng/place-search/domain/model"
 	"googlemaps.github.io/maps"
 )
 
@@ -47,7 +46,7 @@ const noImageURL = "https://1.bp.blogspot.com/-D2I7Z7-HLGU/Xlyf7OYUi8I/AAAAAAABX
 ******/
 
 // GetPlaceDetailsAndPhotoURLsWithQuery キーワードに基づき、プレイスの詳細情報を取得する
-func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQuery(q string) []googlemapdto.Output {
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQuery(q string) []model.Place {
 	places := gateway.searchPlacesWithQuery(q)
 	placeIDs := gateway.getPlaceIDs(places.Results)
 
@@ -55,7 +54,7 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQuery(q string) 
 }
 
 // GetPlaceDetailsAndPhotoURLsWithQueryLatLng キーワード、経度/緯度に基づき、プレイスの詳細情報を取得する
-func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q string, lat float64, lng float64) []googlemapdto.Output {
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q string, lat float64, lng float64) []model.Place {
 	places := gateway.searchPlacesWithQueryLatLng(q, lat, lng)
 	placeIDs := gateway.getPlaceIDs(places.Results)
 
@@ -63,8 +62,8 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLsWithQueryLatLng(q st
 }
 
 // GetPlaceDetailsAndPhotoURLs placeIDsに基づき、プレイスの詳細情報を取得する
-func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLs(placeIDs []string, isFavorite bool) []googlemapdto.Output {
-	googleMapOutputs := []googlemapdto.Output{}
+func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLs(placeIDs []string, isFavorite bool) []model.Place {
+	googleMapOutputs := []model.Place{}
 
 	maxDetails := maxDetailsOfSearch
 	if isFavorite {
@@ -82,7 +81,7 @@ func (gateway *GoogleMapGateway) GetPlaceDetailsAndPhotoURLs(placeIDs []string, 
 			placePhotoURL = gateway.getPlacePhotoURL(placeDetail.Photos[0].PhotoReference)
 		}
 
-		googleMapOutput := googlemapdto.Output{
+		googleMapOutput := model.Place{
 			Name:     placeDetail.Name,
 			PlaceID:  placeDetail.PlaceID,
 			Address:  placeDetail.FormattedAddress,
